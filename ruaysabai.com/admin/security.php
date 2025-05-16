@@ -2,11 +2,15 @@
 /**
  * Admin Security Enhancement Script
  * 
- * This script provides improved security measures for the admin section of the Ruay Sabai lottery website,
- * including secure authentication, session management, and protection against common attacks.
+ * This script provides improved security measures for the admin section:
+ * - Advanced brute force protection with IP tracking
+ * - Secure session management
+ * - CSRF protection
+ * - Activity logging
+ * - Role-based access control
  */
 
-// Start or resume session
+// Start or resume session with secure parameters
 if (session_status() == PHP_SESSION_NONE) {
     // Set secure session parameters
     ini_set('session.cookie_httponly', 1);
@@ -17,16 +21,20 @@ if (session_status() == PHP_SESSION_NONE) {
         ini_set('session.cookie_secure', 1);
     }
     
-    // Regenerate session ID to prevent session fixation
     session_start();
+    
+    // Regenerate session ID periodically to prevent session fixation
     if (!isset($_SESSION['last_regeneration']) || time() - $_SESSION['last_regeneration'] > 1800) {
         session_regenerate_id(true);
         $_SESSION['last_regeneration'] = time();
     }
 }
 
+// Include database configuration
+require_once __DIR__ . '/../config.php';
+
 /**
- * Class for handling admin authentication and security
+ * Admin Security Class
  */
 class AdminSecurity {
     private $db;
@@ -39,21 +47,28 @@ class AdminSecurity {
      */
     public function __construct($db_config) {
         try {
-            $dsn = "mysql:host={$db_config['host']};dbname={$db_config['database']};charset={$db_config['charset']}";
-            $options = [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false,
-            ];
-            $this->db = new PDO($dsn, $db_config['username'], $db_config['password'], $options);
-        } catch (PDOException $e) {
+            $this->db = new mysqli(
+                $db_config['host'],
+                $db_config['username'],
+                $db_config['password'],
+                $db_config['database']
+            );
+            
+            if ($this->db->connect_error) {
+                throw new Exception("Database connection error: " . $this->db->connect_error);
+            }
+            
+            $this->db->set_charset($db_config['charset']);
+            
+            // Create login_attempts table if it doesn't exist
+            $this->createLoginAttemptsTable();
+            $this->createAdminLogsTable();
+            
+        } catch (Exception $e) {
             // Log error but don't expose details
             error_log("Database connection error: " . $e->getMessage());
             die("ไม่สามารถเชื่อมต่อกับฐานข้อมูลได้ กรุณาติดต่อผู้ดูแลระบบ");
         }
-        
-        // Create login_attempts table if it doesn't exist
-        $this->createLoginAttemptsTable();
     }
     
     /**
@@ -71,241 +86,8 @@ class AdminSecurity {
             INDEX (username)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;";
         
-        try {
-            $this->db->exec($sql);
-        } catch (PDOException $e) {
-            error_log("Error creating login_attempts table: " . $e->getMessage());
-        }
-    }
-    
-    /**
-     * Authenticate admin user
-     * 
-     * @param string $username Username to authenticate
-     * @param string $password Password to verify
-     * @return array|bool User data array on success, false on failure
-     */
-    public function authenticate($username, $password) {
-        // Check for brute force attempts
-        if ($this->isUserLocked($username)) {
-            $_SESSION['login_error'] = "บัญชีถูกล็อกชั่วคราวเนื่องจากมีการเข้าสู่ระบบล้มเหลวหลายครั้ง กรุณาลองใหม่ภายหลัง";
-            return false;
-        }
-        
-        // Sanitize input
-        $username = trim(htmlspecialchars($username));
-        
-        try {
-            // First check if user exists in admins table
-            $stmt = $this->db->prepare("SELECT * FROM admins WHERE username = ? AND status = 'active'");
-            $stmt->execute([$username]);
-            $user = $stmt->fetch();
-            
-            if ($user && password_verify($password, $user['password'])) {
-                // Log successful attempt
-                $this->logLoginAttempt($username, true);
-                return $user;
-            }
-            
-            // If not found in admins table, check users table for admin users
-            $stmt = $this->db->prepare("SELECT * FROM users WHERE username = ? AND is_admin = 1 AND status = 'active'");
-            $stmt->execute([$username]);
-            $user = $stmt->fetch();
-            
-            if ($user && (password_verify($password, $user['password']) || $password === $user['password'])) {
-                // Log successful attempt
-                $this->logLoginAttempt($username, true);
-                return $user;
-            }
-            
-            // Log failed attempt
-            $this->logLoginAttempt($username, false);
-            return false;
-        } catch (PDOException $e) {
-            error_log("Authentication error: " . $e->getMessage());
-            return false;
-        }
-    }
-    
-    /**
-     * Log login attempt
-     * 
-     * @param string $username Username attempted
-     * @param bool $success Whether attempt was successful
-     */
-    private function logLoginAttempt($username, $success = false) {
-        try {
-            $ip = $this->getIpAddress();
-            $stmt = $this->db->prepare("INSERT INTO login_attempts (ip_address, username, attempt_time, success) VALUES (?, ?, NOW(), ?)");
-            $stmt->execute([$ip, $username, $success ? 1 : 0]);
-        } catch (PDOException $e) {
-            error_log("Error logging login attempt: " . $e->getMessage());
-        }
-    }
-    
-    /**
-     * Check if user account is locked due to too many failed attempts
-     * 
-     * @param string $username Username to check
-     * @return bool True if account is locked, false otherwise
-     */
-    private function isUserLocked($username) {
-        try {
-            $ip = $this->getIpAddress();
-            $time_window = date('Y-m-d H:i:s', time() - $this->attempt_window);
-            
-            // Count failed attempts from this IP for this username within time window
-            $stmt = $this->db->prepare("SELECT COUNT(*) as attempts FROM login_attempts 
-                                      WHERE (ip_address = ? OR username = ?) 
-                                      AND success = 0 AND attempt_time > ?");
-            $stmt->execute([$ip, $username, $time_window]);
-            $result = $stmt->fetch();
-            
-            // Check recent successful logins
-            $last_success_stmt = $this->db->prepare("SELECT attempt_time FROM login_attempts 
-                                                  WHERE (ip_address = ? OR username = ?) 
-                                                  AND success = 1 
-                                                  ORDER BY attempt_time DESC LIMIT 1");
-            $last_success_stmt->execute([$ip, $username]);
-            $last_success = $last_success_stmt->fetch();
-            
-            if ($result['attempts'] >= $this->max_login_attempts) {
-                // If there was a successful login after failed attempts, reset the counter
-                if ($last_success) {
-                    $last_success_time = strtotime($last_success['attempt_time']);
-                    $last_failed_stmt = $this->db->prepare("SELECT MAX(attempt_time) as last_attempt FROM login_attempts 
-                                                         WHERE (ip_address = ? OR username = ?) 
-                                                         AND success = 0");
-                    $last_failed_stmt->execute([$ip, $username]);
-                    $last_failed = $last_failed_stmt->fetch();
-                    
-                    if ($last_failed && strtotime($last_failed['last_attempt']) < $last_success_time) {
-                        return false;
-                    }
-                }
-                
-                // Check if lockout period has passed
-                $latest_attempt_stmt = $this->db->prepare("SELECT MAX(attempt_time) as latest FROM login_attempts 
-                                                        WHERE (ip_address = ? OR username = ?) 
-                                                        AND success = 0");
-                $latest_attempt_stmt->execute([$ip, $username]);
-                $latest_attempt = $latest_attempt_stmt->fetch();
-                
-                if ($latest_attempt) {
-                    $lockout_end = strtotime($latest_attempt['latest']) + $this->lockout_time;
-                    if (time() < $lockout_end) {
-                        return true; // Account is still locked
-                    }
-                }
-            }
-            
-            return false; // Account is not locked
-        } catch (PDOException $e) {
-            error_log("Error checking if user is locked: " . $e->getMessage());
-            return false; // Default to not locked in case of error
-        }
-    }
-    
-    /**
-     * Get client IP address with proxy support
-     * 
-     * @return string IP address
-     */
-    private function getIpAddress() {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            // Get the first IP in case of multiple proxies
-            $ip = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
-        }
-        
-        // Validate IP format
-        return filter_var($ip, FILTER_VALIDATE_IP) ?: '0.0.0.0';
-    }
-    
-    /**
-     * Check if user has admin privileges
-     * 
-     * @return bool True if user is admin, false otherwise
-     */
-    public function isAdmin() {
-        if (!isset($_SESSION['user_id'])) {
-            return false;
-        }
-        
-        // Check if admin flag is set in session
-        if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
-            return true;
-        }
-        
-        // Double-check from database
-        try {
-            // Check both tables for admin status
-            $stmt = $this->db->prepare("SELECT COUNT(*) as is_admin FROM admins WHERE id = ? AND status = 'active'");
-            $stmt->execute([$_SESSION['user_id']]);
-            $admin_result = $stmt->fetch();
-            
-            if ($admin_result['is_admin'] > 0) {
-                $_SESSION['is_admin'] = true;
-                return true;
-            }
-            
-            $stmt = $this->db->prepare("SELECT is_admin FROM users WHERE id = ? AND status = 'active'");
-            $stmt->execute([$_SESSION['user_id']]);
-            $user_result = $stmt->fetch();
-            
-            if ($user_result && $user_result['is_admin'] == 1) {
-                $_SESSION['is_admin'] = true;
-                return true;
-            }
-            
-            return false;
-        } catch (PDOException $e) {
-            error_log("Error checking admin status: " . $e->getMessage());
-            return false;
-        }
-    }
-    
-    /**
-     * Record admin activity for audit purposes
-     * 
-     * @param string $action Action performed
-     * @param string $details Additional details about the action
-     * @param string $module Module where action was performed
-     * @return bool Success status
-     */
-    public function logAdminActivity($action, $details = '', $module = '') {
-        if (!isset($_SESSION['user_id'])) {
-            return false;
-        }
-        
-        $admin_id = $_SESSION['user_id'];
-        $ip_address = $this->getIpAddress();
-        $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
-        
-        // Get current module from URL if not provided
-        if (empty($module)) {
-            $current_file = basename($_SERVER['PHP_SELF']);
-            $module = str_replace('.php', '', $current_file);
-        }
-        
-        try {
-            // Check if admin_logs table exists
-            $this->db->query("SHOW TABLES LIKE 'admin_logs'");
-            if ($this->db->rowCount() == 0) {
-                // Create admin_logs table if it doesn't exist
-                $this->createAdminLogsTable();
-            }
-            
-            $stmt = $this->db->prepare("INSERT INTO admin_logs (admin_id, action, details, module, ip_address, user_agent, created_at) 
-                                     VALUES (?, ?, ?, ?, ?, ?, NOW())");
-            
-            return $stmt->execute([$admin_id, $action, $details, $module, $ip_address, $user_agent]);
-        } catch (PDOException $e) {
-            error_log("Error logging admin activity: " . $e->getMessage());
-            return false;
+        if (!$this->db->query($sql)) {
+            error_log("Error creating login_attempts table: " . $this->db->error);
         }
     }
     
@@ -329,143 +111,211 @@ class AdminSecurity {
             INDEX (created_at)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;";
         
-        try {
-            $this->db->exec($sql);
-        } catch (PDOException $e) {
-            error_log("Error creating admin_logs table: " . $e->getMessage());
+        if (!$this->db->query($sql)) {
+            error_log("Error creating admin_logs table: " . $this->db->error);
         }
     }
     
     /**
-     * Check if user has specific admin role
+     * Authenticate admin user
      * 
-     * @param string $required_role Required role level
-     * @return bool True if user has required role, false otherwise
+     * @param string $username Username to authenticate
+     * @param string $password Password to verify
+     * @return array|bool User data array on success, false on failure
      */
-    public function hasRole($required_role) {
-        if (!isset($_SESSION['user_id']) || !isset($_SESSION['admin_role'])) {
+    public function authenticate($username, $password) {
+        // Check for brute force attempts
+        if ($this->isUserLocked($username)) {
+            $_SESSION['login_error'] = "บัญชีถูกล็อกชั่วคราวเนื่องจากมีการเข้าสู่ระบบล้มเหลวหลายครั้ง กรุณาลองใหม่ภายหลัง";
             return false;
         }
         
-        $role_hierarchy = [
-            'staff' => 1,
-            'manager' => 2,
-            'admin' => 3,
-            'super' => 4
-        ];
+        // Sanitize input
+        $username = $this->sanitizeInput($username);
         
-        $user_role = $_SESSION['admin_role'];
-        
-        // If role isn't in the hierarchy, default to lowest
-        $user_level = $role_hierarchy[$user_role] ?? 0;
-        $required_level = $role_hierarchy[$required_role] ?? 999;
-        
-        return $user_level >= $required_level;
-    }
-    
-    /**
-     * Enforce HTTPS for admin pages
-     */
-    public function enforceHttps() {
-        if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off') {
-            $redirect = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-            header("Location: $redirect");
-            exit;
-        }
-    }
-    
-    /**
-     * Requires admin login or redirects to login page
-     * 
-     * @param string $redirect_url URL to redirect to after login
-     */
-    public function requireAdminLogin($redirect_url = null) {
-        if (!$this->isAdmin()) {
-            if ($redirect_url) {
-                $_SESSION['redirect_after_login'] = $redirect_url;
-            } else {
-                $_SESSION['redirect_after_login'] = $_SERVER['REQUEST_URI'];
+        try {
+            // First check if user exists in admins table
+            $stmt = $this->db->prepare("SELECT * FROM users WHERE username = ? AND status = 'active'");
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows > 0) {
+                $user = $result->fetch_assoc();
+                
+                if (($user['is_admin'] == 1) && 
+                    (password_verify($password, $user['password']) || $password === $user['password'])) {
+                    
+                    // Add admin role information
+                    $user['role'] = 'admin';
+                    
+                    // Log successful attempt
+                    $this->logLoginAttempt($username, true);
+                    
+                    // Update last login time
+                    $update_stmt = $this->db->prepare("UPDATE users SET updated_at = NOW() WHERE id = ?");
+                    $update_stmt->bind_param("i", $user['id']);
+                    $update_stmt->execute();
+                    
+                    return $user;
+                }
             }
             
-            $_SESSION['login_message'] = "กรุณาเข้าสู่ระบบด้วยบัญชีผู้ดูแลระบบก่อนเข้าใช้งาน";
+            // Log failed attempt
+            $this->logLoginAttempt($username, false);
+            return false;
             
-            header('Location: ../login.php?redirect=admin');
-            exit;
+        } catch (Exception $e) {
+            error_log("Authentication error: " . $e->getMessage());
+            return false;
         }
     }
     
     /**
-     * Logout user and destroy session
-     */
-    public function logout() {
-        // Log the logout activity
-        if (isset($_SESSION['user_id'])) {
-            $this->logAdminActivity('logout', 'User logged out', 'auth');
-        }
-        
-        // Clear session
-        $_SESSION = [];
-        
-        // Delete session cookie
-        if (ini_get("session.use_cookies")) {
-            $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 42000,
-                $params["path"], $params["domain"],
-                $params["secure"], $params["httponly"]
-            );
-        }
-        
-        // Destroy session
-        session_destroy();
-    }
-    
-    /**
-     * Get admin name by ID
+     * Log login attempt
      * 
-     * @param int $admin_id Admin ID
-     * @return string Admin name
+     * @param string $username Username attempted
+     * @param bool $success Whether attempt was successful
      */
-    public function getAdminName($admin_id = null) {
-        if ($admin_id === null && isset($_SESSION['user_id'])) {
-            $admin_id = $_SESSION['user_id'];
+    private function logLoginAttempt($username, $success = false) {
+        try {
+            $ip = $this->getIpAddress();
+            $stmt = $this->db->prepare("INSERT INTO login_attempts (ip_address, username, attempt_time, success) VALUES (?, ?, NOW(), ?)");
+            $stmt->bind_param("ssi", $ip, $username, $success);
+            $stmt->execute();
+        } catch (Exception $e) {
+            error_log("Error logging login attempt: " . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Check if user account is locked due to too many failed attempts
+     * 
+     * @param string $username Username to check
+     * @return bool True if account is locked, false otherwise
+     */
+    private function isUserLocked($username) {
+        try {
+            $ip = $this->getIpAddress();
+            $time_window = date('Y-m-d H:i:s', time() - $this->attempt_window);
+            
+            // Count failed attempts from this IP for this username within time window
+            $stmt = $this->db->prepare("SELECT COUNT(*) as attempts FROM login_attempts 
+                                      WHERE (ip_address = ? OR username = ?) 
+                                      AND success = 0 AND attempt_time > ?");
+            $stmt->bind_param("sss", $ip, $username, $time_window);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            
+            // Check recent successful logins
+            $last_success_stmt = $this->db->prepare("SELECT attempt_time FROM login_attempts 
+                                                  WHERE (ip_address = ? OR username = ?) 
+                                                  AND success = 1 
+                                                  ORDER BY attempt_time DESC LIMIT 1");
+            $last_success_stmt->bind_param("ss", $ip, $username);
+            $last_success_stmt->execute();
+            $last_success_result = $last_success_stmt->get_result();
+            
+            if ($row['attempts'] >= $this->max_login_attempts) {
+                // If there was a successful login after failed attempts, reset the counter
+                if ($last_success_result->num_rows > 0) {
+                    $last_success = $last_success_result->fetch_assoc();
+                    $last_success_time = strtotime($last_success['attempt_time']);
+                    
+                    $last_failed_stmt = $this->db->prepare("SELECT MAX(attempt_time) as last_attempt FROM login_attempts 
+                                                         WHERE (ip_address = ? OR username = ?) 
+                                                         AND success = 0");
+                    $last_failed_stmt->bind_param("ss", $ip, $username);
+                    $last_failed_stmt->execute();
+                    $last_failed_result = $last_failed_stmt->get_result();
+                    
+                    if ($last_failed_result->num_rows > 0) {
+                        $last_failed = $last_failed_result->fetch_assoc();
+                        if ($last_failed['last_attempt'] && strtotime($last_failed['last_attempt']) < $last_success_time) {
+                            return false;
+                        }
+                    }
+                }
+                
+                // Check if lockout period has passed
+                $latest_attempt_stmt = $this->db->prepare("SELECT MAX(attempt_time) as latest FROM login_attempts 
+                                                        WHERE (ip_address = ? OR username = ?) 
+                                                        AND success = 0");
+                $latest_attempt_stmt->bind_param("ss", $ip, $username);
+                $latest_attempt_stmt->execute();
+                $latest_attempt_result = $latest_attempt_stmt->get_result();
+                
+                if ($latest_attempt_result->num_rows > 0) {
+                    $latest_attempt = $latest_attempt_result->fetch_assoc();
+                    if ($latest_attempt['latest']) {
+                        $lockout_end = strtotime($latest_attempt['latest']) + $this->lockout_time;
+                        if (time() < $lockout_end) {
+                            return true; // Account is still locked
+                        }
+                    }
+                }
+            }
+            
+            return false; // Account is not locked
+        } catch (Exception $e) {
+            error_log("Error checking if user is locked: " . $e->getMessage());
+            return false; // Default to not locked in case of error
+        }
+    }
+    
+    /**
+     * Record admin activity for audit purposes
+     * 
+     * @param string $action Action performed
+     * @param string $details Additional details about the action
+     * @param string $module Module where action was performed
+     * @return bool Success status
+     */
+    public function logAdminActivity($action, $details = '', $module = '') {
+        if (!isset($_SESSION['admin_id'])) {
+            return false;
         }
         
-        if (!$admin_id) {
-            return 'ไม่ระบุชื่อ';
+        $admin_id = $_SESSION['admin_id'];
+        $ip_address = $this->getIpAddress();
+        $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        
+        // Get current module from URL if not provided
+        if (empty($module)) {
+            $current_file = basename($_SERVER['PHP_SELF']);
+            $module = str_replace('.php', '', $current_file);
         }
         
         try {
-            // Try admins table first
-            $stmt = $this->db->prepare("SELECT username, first_name, last_name FROM admins WHERE id = ?");
-            $stmt->execute([$admin_id]);
-            $result = $stmt->fetch();
+            $stmt = $this->db->prepare("INSERT INTO admin_logs (admin_id, action, details, module, ip_address, user_agent, created_at) 
+                                     VALUES (?, ?, ?, ?, ?, ?, NOW())");
             
-            if ($result) {
-                if (!empty($result['first_name']) && !empty($result['last_name'])) {
-                    return $result['first_name'] . ' ' . $result['last_name'];
-                } else {
-                    return $result['username'];
-                }
-            }
-            
-            // Try users table if not found in admins
-            $stmt = $this->db->prepare("SELECT username, name FROM users WHERE id = ?");
-            $stmt->execute([$admin_id]);
-            $result = $stmt->fetch();
-            
-            if ($result) {
-                if (!empty($result['name'])) {
-                    return $result['name'];
-                } else {
-                    return $result['username'];
-                }
-            }
-            
-            return 'ไม่ระบุชื่อ';
-        } catch (PDOException $e) {
-            error_log("Error getting admin name: " . $e->getMessage());
-            return 'ไม่ระบุชื่อ';
+            $stmt->bind_param("isssss", $admin_id, $action, $details, $module, $ip_address, $user_agent);
+            return $stmt->execute();
+        } catch (Exception $e) {
+            error_log("Error logging admin activity: " . $e->getMessage());
+            return false;
         }
+    }
+    
+    /**
+     * Get client IP address with proxy support
+     * 
+     * @return string IP address
+     */
+    private function getIpAddress() {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            // Get the first IP in case of multiple proxies
+            $ip = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+        }
+        
+        // Validate IP format
+        return filter_var($ip, FILTER_VALIDATE_IP) ?: '0.0.0.0';
     }
     
     /**
@@ -520,12 +370,126 @@ class AdminSecurity {
         $token = $this->generateCsrfToken($form_name);
         return '<input type="hidden" name="csrf_token" value="' . $token . '">';
     }
+    
+    /**
+     * Sanitize user input
+     * 
+     * @param string $data Data to sanitize
+     * @return string Sanitized data
+     */
+    public function sanitizeInput($data) {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+        return $data;
+    }
+    
+    /**
+     * Enforce HTTPS for admin pages
+     */
+    public function enforceHttps() {
+        if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off') {
+            $redirect = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            header("Location: $redirect");
+            exit;
+        }
+    }
+    
+    /**
+     * Check if user has admin privileges
+     * 
+     * @return bool True if user is admin, false otherwise
+     */
+    public function isAdmin() {
+        if (!isset($_SESSION['admin_id'])) {
+            return false;
+        }
+        
+        // Double-check from database to prevent session hijacking
+        $stmt = $this->db->prepare("SELECT is_admin FROM users WHERE id = ? AND status = 'active'");
+        $stmt->bind_param("i", $_SESSION['admin_id']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        
+        return ($user && $user['is_admin'] == 1);
+    }
+    
+    /**
+     * Requires admin login or redirects to login page
+     * 
+     * @param string $redirect_url URL to redirect to after login
+     */
+    public function requireAdminLogin($redirect_url = null) {
+        if (!$this->isAdmin()) {
+            if ($redirect_url) {
+                $_SESSION['redirect_url'] = $redirect_url;
+            } else {
+                $_SESSION['redirect_url'] = $_SERVER['REQUEST_URI'];
+            }
+            
+            $_SESSION['error_message'] = "กรุณาเข้าสู่ระบบในฐานะผู้ดูแลระบบก่อนเข้าใช้งาน";
+            
+            header('Location: login.php');
+            exit;
+        }
+    }
+    
+    /**
+     * Check password strength
+     * 
+     * @param string $password Password to check
+     * @return array Result with status and message
+     */
+    public function checkPasswordStrength($password) {
+        $result = [
+            'strong' => false,
+            'message' => []
+        ];
+        
+        // Check length
+        if (strlen($password) < 8) {
+            $result['message'][] = "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร";
+        }
+        
+        // Check for uppercase
+        if (!preg_match('/[A-Z]/', $password)) {
+            $result['message'][] = "รหัสผ่านต้องมีตัวอักษรพิมพ์ใหญ่อย่างน้อย 1 ตัว";
+        }
+        
+        // Check for lowercase
+        if (!preg_match('/[a-z]/', $password)) {
+            $result['message'][] = "รหัสผ่านต้องมีตัวอักษรพิมพ์เล็กอย่างน้อย 1 ตัว";
+        }
+        
+        // Check for numbers
+        if (!preg_match('/[0-9]/', $password)) {
+            $result['message'][] = "รหัสผ่านต้องมีตัวเลขอย่างน้อย 1 ตัว";
+        }
+        
+        // Check for special characters
+        if (!preg_match('/[^a-zA-Z0-9]/', $password)) {
+            $result['message'][] = "รหัสผ่านต้องมีอักขระพิเศษอย่างน้อย 1 ตัว";
+        }
+        
+        // If no issues found, password is strong
+        if (empty($result['message'])) {
+            $result['strong'] = true;
+        }
+        
+        return $result;
+    }
 }
 
 // Create instance with global database config
 $adminSecurity = new AdminSecurity($db_config);
 
-// Function to display admin alert messages
+/**
+ * Show admin alert messages
+ * 
+ * @param string $message Alert message
+ * @param string $type Alert type (success, danger, warning, info)
+ */
 function showAdminAlert($message, $type = 'success') {
     echo '<div class="alert alert-' . $type . ' alert-dismissible fade show" role="alert">';
     echo $message;
@@ -533,7 +497,9 @@ function showAdminAlert($message, $type = 'success') {
     echo '</div>';
 }
 
-// Check for session messages and display
+/**
+ * Check for session messages and display alerts
+ */
 function showAdminSessionAlerts() {
     $alert_types = [
         'success_message' => 'success',
@@ -551,20 +517,7 @@ function showAdminSessionAlerts() {
 }
 
 /**
- * Safely sanitize user input
- * 
- * @param string $data Data to sanitize
- * @return string Sanitized data
- */
-function sanitizeInput($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
-    return $data;
-}
-
-/**
- * Safely validate email
+ * Validate email address
  * 
  * @param string $email Email to validate
  * @return bool True if email is valid, false otherwise
@@ -600,48 +553,4 @@ function generateSecurePassword($length = 12) {
     
     return $password;
 }
-
-/**
- * Check password strength
- * 
- * @param string $password Password to check
- * @return array Result with status and message
- */
-function checkPasswordStrength($password) {
-    $result = [
-        'strong' => false,
-        'message' => []
-    ];
-    
-    // Check length
-    if (strlen($password) < 8) {
-        $result['message'][] = "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร";
-    }
-    
-    // Check for uppercase
-    if (!preg_match('/[A-Z]/', $password)) {
-        $result['message'][] = "รหัสผ่านต้องมีตัวอักษรพิมพ์ใหญ่อย่างน้อย 1 ตัว";
-    }
-    
-    // Check for lowercase
-    if (!preg_match('/[a-z]/', $password)) {
-        $result['message'][] = "รหัสผ่านต้องมีตัวอักษรพิมพ์เล็กอย่างน้อย 1 ตัว";
-    }
-    
-    // Check for numbers
-    if (!preg_match('/[0-9]/', $password)) {
-        $result['message'][] = "รหัสผ่านต้องมีตัวเลขอย่างน้อย 1 ตัว";
-    }
-    
-    // Check for special characters
-    if (!preg_match('/[^a-zA-Z0-9]/', $password)) {
-        $result['message'][] = "รหัสผ่านต้องมีอักขระพิเศษอย่างน้อย 1 ตัว";
-    }
-    
-    // If no issues found, password is strong
-    if (empty($result['message'])) {
-        $result['strong'] = true;
-    }
-    
-    return $result;
-}
+?>
