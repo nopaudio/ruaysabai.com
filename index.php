@@ -938,56 +938,62 @@ $isLoggedIn = ($user !== null);
                 </div>
                 
                 <!-- แสดงข้อมูลขีดจำกัด -->
-                <?php if ($isLoggedIn): ?>
-                    <?php
-                    $db = Database::getInstance();
-                    $user_id = $user['id'];
-                    $member_type = $user['member_type'];
-                    
-                    if ($member_type == 'monthly') {
-                        $limit = 60;
-                        $used = $db->select("SELECT COUNT(*) as count FROM user_prompts WHERE user_id = ? AND MONTH(created_at) = MONTH(NOW()) AND YEAR(created_at) = YEAR(NOW())", [$user_id]);
-                        $remaining = $limit - (!empty($used) ? $used[0]['count'] : 0);
-                        $period = 'เดือนนี้';
-                    } elseif ($member_type == 'yearly') {
-                        $limit = 120;
-                        $used = $db->select("SELECT COUNT(*) as count FROM user_prompts WHERE user_id = ? AND YEAR(created_at) = YEAR(NOW())", [$user_id]);
-                        $remaining = $limit - (!empty($used) ? $used[0]['count'] : 0);
-                        $period = 'ปีนี้';
-                    } else {
-                        $limit = 10;
-                        $used = $db->select("SELECT COUNT(*) as count FROM user_prompts WHERE user_id = ? AND DATE(created_at) = CURDATE()", [$user_id]);
-                        $remaining = $limit - (!empty($used) ? $used[0]['count'] : 0);
-                        $period = 'วันนี้';
-                    }
-                    
-                    if ($remaining <= 0): ?>
-                        <div class="limit-warning">
-                            <i class="fas fa-exclamation-triangle"></i> 
-                            <strong>คุณใช้สิทธิ์หมดแล้วสำหรับ<?= $period ?></strong><br>
-                            <?php if ($member_type == 'free'): ?>
-                                <a href="subscribe.php" style="color: inherit; text-decoration: underline;">สมัครสมาชิกเพื่อรับสิทธิ์เพิ่มเติม</a>
-                            <?php endif; ?>
-                        </div>
-                    <?php elseif ($remaining <= 3): ?>
-                        <div class="limit-warning">
-                            <i class="fas fa-hourglass-half"></i> 
-                            <strong>เหลือสิทธิ์ <?= $remaining ?> ครั้ง สำหรับ<?= $period ?></strong>
-                        </div>
-                    <?php else: ?>
-                        <div class="limit-info">
-                            <i class="fas fa-info-circle"></i> 
-                            <strong>เหลือสิทธิ์ <?= $remaining ?>/<?= $limit ?> ครั้ง สำหรับ<?= $period ?></strong>
-                        </div>
-                    <?php endif; ?>
-                <?php else: ?>
-                    <div class="limit-info">
-                        <i class="fas fa-user-plus"></i> 
-                        <strong>ผู้ใช้ทั่วไป:</strong> 5 ครั้งต่อวัน | 
-                        <a href="register.php" style="color: inherit; text-decoration: underline;">สมัครสมาชิกฟรี</a> 
-                        เพื่อรับสิทธิ์เพิ่มเติม
-                    </div>
-                <?php endif; ?>
+<?php if ($isLoggedIn): ?>
+    <?php
+    $db = Database::getInstance();
+    $user_id = $user['id'];
+    $member_type = $user['member_type'];
+    $limit = 10;
+    $remaining = 10;
+    $period = 'วันนี้';
+    
+    if ($member_type == 'monthly') {
+        $limit = 60;
+        $used = $db->select("SELECT COUNT(*) as count FROM user_prompts WHERE user_id = ? AND MONTH(created_at) = MONTH(NOW()) AND YEAR(created_at) = YEAR(NOW())", [$user_id]);
+        $used_count = !empty($used) ? $used[0]['count'] : 0;
+        $remaining = $limit - $used_count;
+        $period = 'เดือนนี้';
+    } elseif ($member_type == 'yearly') {
+        $limit = 'ไม่จำกัด';
+        $remaining = 'ไม่จำกัด';
+        $period = 'ปีนี้';
+    } else {
+        $limit = 10;
+        $used = $db->select("SELECT COUNT(*) as count FROM user_prompts WHERE user_id = ? AND DATE(created_at) = CURDATE()", [$user_id]);
+        $used_count = !empty($used) ? $used[0]['count'] : 0;
+        $remaining = $limit - $used_count;
+        $period = 'วันนี้';
+    }
+    ?>
+    
+    <?php if ($remaining !== 'ไม่จำกัด' && $remaining <= 0): ?>
+        <div class="limit-warning">
+            <i class="fas fa-exclamation-triangle"></i> 
+            <strong>คุณใช้สิทธิ์หมดแล้วสำหรับ<?= $period ?></strong><br>
+            <?php if ($member_type == 'free'): ?>
+                <a href="subscribe.php" style="color: inherit; text-decoration: underline;">สมัครแพ็กเกจเช่าซื้อเพื่อรับสิทธิ์เพิ่มเติม</a>
+            <?php endif; ?>
+        </div>
+    <?php elseif ($remaining !== 'ไม่จำกัด' && $remaining <= 3): ?>
+        <div class="limit-warning">
+            <i class="fas fa-hourglass-half"></i> 
+            <strong>เหลือสิทธิ์ <?= $remaining ?> ครั้ง สำหรับ<?= $period ?></strong>
+        </div>
+    <?php else: ?>
+        <div class="limit-info">
+            <i class="fas fa-info-circle"></i> 
+            <strong>เหลือสิทธิ์ <?= $remaining === 'ไม่จำกัด' ? 'ไม่จำกัด' : $remaining . '/' . $limit ?> ครั้ง สำหรับ<?= $period ?></strong>
+        </div>
+    <?php endif; ?>
+    
+<?php else: ?>
+    <div class="limit-info">
+        <i class="fas fa-user-plus"></i> 
+        <strong>ผู้ใช้ทั่วไป:</strong> 5 ครั้งต่อวัน | 
+        <a href="register.php" style="color: inherit; text-decoration: underline;">สมัครสมาชิกฟรี</a> 
+        เพื่อรับสิทธิ์ 10 ครั้งต่อวัน
+    </div>
+<?php endif; ?>
                 
                 <form id="promptForm">
                     <div class="form-group">
@@ -1146,90 +1152,106 @@ $isLoggedIn = ($user !== null);
     </div>
     
     <script>
-        // ตัวแปรสำหรับตรวจสอบการล็อกอิน
-        const isLoggedIn = <?= $isLoggedIn ? 'true' : 'false' ?>;
-        const userType = '<?= $user['member_type'] ?? 'guest' ?>';
+         
+		 
+		 
+		 
+		 
+		 
+		 
+		 // ตัวแปรสำหรับตรวจสอบการล็อกอิน (อยู่ในไฟล์ index.php แล้ว)
+const isLoggedIn = <?= $isLoggedIn ? 'true' : 'false' ?>;
+const userType = '<?= $user['member_type'] ?? 'guest' ?>';
 
-        // Generate Prompt function
-        function generatePrompt() {
-            const subject = document.getElementById('subject').value.trim();
-            const contentType = document.getElementById('content_type').value;
-            const style = document.getElementById('style').value;
-            const scene = document.getElementById('scene').value.trim();
-            const details = document.getElementById('details').value.trim();
-            
-            if (!subject && !contentType && !style && !scene && !details) {
-                alert('กรุณากรอกข้อมูลอย่างน้อย 1 ช่อง');
-                return;
+// แก้ไขฟังก์ชัน generatePrompt
+function generatePrompt() {
+    const subject = document.getElementById('subject').value.trim();
+    const contentType = document.getElementById('content_type').value;
+    const style = document.getElementById('style').value;
+    const scene = document.getElementById('scene').value.trim();
+    const details = document.getElementById('details').value.trim();
+    
+    if (!subject && !contentType && !style && !scene && !details) {
+        alert('กรุณากรอกข้อมูลอย่างน้อย 1 ช่อง');
+        return;
+    }
+    
+    let prompt = '';
+    const baseQuality = 'masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting';
+    
+    if (subject) prompt += subject + ', ';
+    if (contentType) prompt += contentType + ', ';
+    if (style) prompt += style + ' style, ';
+    if (scene) prompt += 'in ' + scene + ', ';
+    if (details) prompt += details + ', ';
+    
+    prompt += baseQuality;
+    
+    // บันทึก prompt ที่ผู้ใช้สร้างลงฐานข้อมูล
+    saveUserPrompt({
+        subject: subject,
+        content_type: contentType,
+        style: style,
+        scene: scene,
+        details: details,
+        generated_prompt: prompt
+    });
+    
+    // Show result
+    const resultSection = document.querySelector('.result-section');
+    resultSection.innerHTML = `
+        <div class="section-title">
+            <div class="section-icon">
+                <i class="fas fa-image"></i>
+            </div>
+            ผลลัพธ์ Prompt
+        </div>
+        
+        <div class="prompt-output">
+            <h3><i class="fas fa-check-circle"></i> Prompt ที่สร้างขึ้น:</h3>
+            <div class="prompt-text" id="generated-prompt">${prompt}</div>
+            <button class="copy-btn" onclick="copyToClipboard('generated-prompt', this)">
+                <i class="fas fa-copy"></i> คัดลอก Prompt
+            </button>
+        </div>
+    `;
+}
+
+// แก้ไขฟังก์ชัน saveUserPrompt
+function saveUserPrompt(data) {
+    fetch('save_user_prompt.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (!result.success) {
+            alert(result.message);
+            // ถ้าหมดสิทธิ์ ให้รีโหลดหน้าเพื่อแสดงสถานะใหม่
+            if (result.message.includes('สิทธิ์')) {
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
             }
-            
-            let prompt = '';
-            const baseQuality = 'masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting';
-            
-            if (subject) prompt += subject + ', ';
-            if (contentType) prompt += contentType + ', ';
-            if (style) prompt += style + ' style, ';
-            if (scene) prompt += 'in ' + scene + ', ';
-            if (details) prompt += details + ', ';
-            
-            prompt += baseQuality;
-            
-            // บันทึก prompt ที่ผู้ใช้สร้างลงฐานข้อมูล
-            saveUserPrompt({
-                subject: subject,
-                content_type: contentType,
-                style: style,
-                scene: scene,
-                details: details,
-                generated_prompt: prompt
-            });
-            
-            // Show result
-            const resultSection = document.querySelector('.result-section');
-            resultSection.innerHTML = `
-                <div class="section-title">
-                    <div class="section-icon">
-                        <i class="fas fa-image"></i>
-                    </div>
-                    ผลลัพธ์ Prompt
-                </div>
-                
-                <div class="prompt-output">
-                    <h3><i class="fas fa-check-circle"></i> Prompt ที่สร้างขึ้น:</h3>
-                    <div class="prompt-text" id="generated-prompt">${prompt}</div>
-                    <button class="copy-btn" onclick="copyToClipboard('generated-prompt', this)">
-                        <i class="fas fa-copy"></i> คัดลอก Prompt
-                    </button>
-                </div>
-            `;
+        } else {
+            // แสดงข้อความสำเร็จ (ถ้าต้องการ)
+            console.log(result.message);
         }
-
-        // บันทึก user prompt ลงฐานข้อมูล
-        function saveUserPrompt(data) {
-            fetch('save_user_prompt.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (!result.success) {
-                    alert(result.message);
-                    // ถ้าหมดสิทธิ์ ให้รีโหลดหน้าเพื่อแสดงสถานะใหม่
-                    if (result.message.includes('สิทธิ์')) {
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 2000);
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('เกิดข้อผิดพลาดในการบันทึก กรุณาลองใหม่อีกครั้ง');
+    });
+}
+		 
+		 
+		 
+		 
+		 
+		 
         // Copy to clipboard function
         function copyToClipboard(elementId, buttonElement) {
             const element = document.getElementById(elementId);
@@ -1425,5 +1447,238 @@ $isLoggedIn = ($user !== null);
         document.addEventListener('touchstart', function() {}, {passive: true});
         document.addEventListener('touchmove', function() {}, {passive: true});
     </script>
+    
+    
+    
+    <script>
+// ตัวแปรสำหรับตรวจสอบการล็อกอิน
+const isLoggedIn = <?= $isLoggedIn ? 'true' : 'false' ?>;
+const userType = '<?= $user['member_type'] ?? 'guest' ?>';
+
+// แก้ไขฟังก์ชัน generatePrompt
+function generatePrompt() {
+    const subject = document.getElementById('subject').value.trim();
+    const contentType = document.getElementById('content_type').value;
+    const style = document.getElementById('style').value;
+    const scene = document.getElementById('scene').value.trim();
+    const details = document.getElementById('details').value.trim();
+    
+    if (!subject && !contentType && !style && !scene && !details) {
+        alert('กรุณากรอกข้อมูลอย่างน้อย 1 ช่อง');
+        return;
+    }
+    
+    let prompt = '';
+    const baseQuality = 'masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting';
+    
+    if (subject) prompt += subject + ', ';
+    if (contentType) prompt += contentType + ', ';
+    if (style) prompt += style + ' style, ';
+    if (scene) prompt += 'in ' + scene + ', ';
+    if (details) prompt += details + ', ';
+    
+    prompt += baseQuality;
+    
+    // บันทึก prompt ที่ผู้ใช้สร้างลงฐานข้อมูล
+    saveUserPrompt({
+        subject: subject,
+        content_type: contentType,
+        style: style,
+        scene: scene,
+        details: details,
+        generated_prompt: prompt
+    });
+    
+    // Show result
+    const resultSection = document.querySelector('.result-section');
+    resultSection.innerHTML = `
+        <div class="section-title">
+            <div class="section-icon">
+                <i class="fas fa-image"></i>
+            </div>
+            ผลลัพธ์ Prompt
+        </div>
+        
+        <div class="prompt-output">
+            <h3><i class="fas fa-check-circle"></i> Prompt ที่สร้างขึ้น:</h3>
+            <div class="prompt-text" id="generated-prompt">${prompt}</div>
+            <button class="copy-btn" onclick="copyToClipboard('generated-prompt', this)">
+                <i class="fas fa-copy"></i> คัดลอก Prompt
+            </button>
+        </div>
+    `;
+}
+
+// แก้ไขฟังก์ชัน saveUserPrompt ให้แสดงข้อความที่ชัดเจนขึ้น
+function saveUserPrompt(data) {
+    // แสดง loading indicator
+    const generateBtn = document.querySelector('.generate-btn');
+    const originalText = generateBtn.innerHTML;
+    generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึก...';
+    generateBtn.disabled = true;
+    
+    fetch('save_user_prompt.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(result => {
+        // คืนค่าปุ่มเดิม
+        generateBtn.innerHTML = originalText;
+        generateBtn.disabled = false;
+        
+        if (!result.success) {
+            // แสดงข้อความแจ้งเตือนแบบ modal
+            showLimitModal(result.message);
+            
+            // ถ้าหมดสิทธิ์ ให้รีโหลดหน้าเพื่อแสดงสถานะใหม่
+            if (result.message.includes('สิทธิ์ครบแล้ว')) {
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            }
+        } else {
+            // แสดงข้อความสำเร็จ
+            showSuccessMessage(result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        generateBtn.innerHTML = originalText;
+        generateBtn.disabled = false;
+        
+        alert('เกิดข้อผิดพลาดในการบันทึก กรุณาลองใหม่อีกครั้ง\n' + error.message);
+    });
+}
+
+// ฟังก์ชันแสดง modal แจ้งเตือน
+function showLimitModal(message) {
+    // สร้าง modal แจ้งเตือน
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    `;
+    
+    const modalContent = document.createElement('div');
+    modalContent.style.cssText = `
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    `;
+    
+    modalContent.innerHTML = `
+        <div style="color: #ea580c; font-size: 3em; margin-bottom: 20px;">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3 style="color: #333; margin-bottom: 15px;">ขีดจำกัดการใช้งาน</h3>
+        <p style="color: #666; line-height: 1.5; margin-bottom: 25px;">${message}</p>
+        <button onclick="this.closest('.modal-overlay').remove()" 
+                style="background: linear-gradient(135deg, #667eea, #764ba2); 
+                       color: white; border: none; padding: 12px 30px; 
+                       border-radius: 10px; cursor: pointer; font-weight: 600;">
+            เข้าใจแล้ว
+        </button>
+    `;
+    
+    modal.className = 'modal-overlay';
+    modal.appendChild(modalContent);
+    document.body.appendChild(modal);
+    
+    // ปิด modal เมื่อคลิกนอกเนื้อหา
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    });
+}
+
+// ฟังก์ชันแสดงข้อความสำเร็จ
+function showSuccessMessage(message) {
+    const successDiv = document.createElement('div');
+    successDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        z-index: 9999;
+        font-weight: 600;
+        box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3);
+        animation: slideInRight 0.3s ease;
+    `;
+    
+    successDiv.innerHTML = `
+        <i class="fas fa-check-circle" style="margin-right: 8px;"></i>
+        ${message}
+    `;
+    
+    document.body.appendChild(successDiv);
+    
+    // ลบข้อความหลัง 3 วินาที
+    setTimeout(() => {
+        successDiv.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => {
+            if (successDiv.parentNode) {
+                successDiv.parentNode.removeChild(successDiv);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// เพิ่ม CSS animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOutRight {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+
+// ส่วน JavaScript อื่นๆ ที่มีอยู่เดิม...
+// (Copy ฟังก์ชันอื่นๆ จากโค้ดเดิมมาใส่ต่อ เช่น copyToClipboard, previousSlide, nextSlide, etc.)
+</script>
+    
 </body>
 </html>
