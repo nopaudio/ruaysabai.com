@@ -244,6 +244,93 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 jsonResponse($result, $result ? 'ลบข้อมูลเรียบร้อยแล้ว' : 'เกิดข้อผิดพลาด');
                 break;
                 
+            // *** User Management Actions ***
+            case 'get_users':
+                $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+                $limit = 10;
+                $offset = ($page - 1) * $limit;
+                
+                $search = isset($_POST['search']) ? cleanInput($_POST['search']) : '';
+                $filter = isset($_POST['filter']) ? cleanInput($_POST['filter']) : '';
+                
+                $where = "1=1";
+                $params = [];
+                
+                if ($search) {
+                    $where .= " AND (username LIKE ? OR email LIKE ? OR full_name LIKE ?)";
+                    $searchTerm = "%$search%";
+                    $params = array_merge($params, [$searchTerm, $searchTerm, $searchTerm]);
+                }
+                
+                if ($filter && $filter !== 'all') {
+                    $where .= " AND member_type = ?";
+                    $params[] = $filter;
+                }
+                
+                // นับจำนวนทั้งหมด
+                $totalResult = $db->select("SELECT COUNT(*) as count FROM users WHERE $where", $params);
+                $total = $totalResult[0]['count'];
+                
+                // ดึงข้อมูลผู้ใช้
+                $users = $db->select("SELECT * FROM users WHERE $where ORDER BY created_at DESC LIMIT $limit OFFSET $offset", $params);
+                
+                jsonResponse(true, 'ดึงข้อมูลสำเร็จ', [
+                    'users' => $users,
+                    'total' => $total,
+                    'page' => $page,
+                    'pages' => ceil($total / $limit)
+                ]);
+                break;
+                
+            case 'get_user':
+                $user_id = intval($_POST['user_id']);
+                $user = $db->select("SELECT * FROM users WHERE id = ?", [$user_id]);
+                if ($user) {
+                    jsonResponse(true, 'ดึงข้อมูลสำเร็จ', $user[0]);
+                } else {
+                    jsonResponse(false, 'ไม่พบข้อมูลผู้ใช้');
+                }
+                break;
+                
+            case 'update_user_membership':
+                $user_id = intval($_POST['user_id']);
+                $member_type = cleanInput($_POST['member_type']);
+                $expire_date = cleanInput($_POST['expire_date']) ?: null;
+                
+                $updateData = [
+                    'member_type' => $member_type,
+                    'expire_date' => $expire_date,
+                    'updated_at' => date('Y-m-d H:i:s')
+                ];
+                
+                // ปรับ credits และ daily_limit ตาม member_type
+                if ($member_type === 'monthly') {
+                    $updateData['credits'] = 60;
+                    $updateData['daily_limit'] = 60;
+                    $updateData['user_type'] = 'premium';
+                } elseif ($member_type === 'yearly') {
+                    $updateData['credits'] = 999999;
+                    $updateData['daily_limit'] = 999999;
+                    $updateData['user_type'] = 'premium';
+                } else {
+                    $updateData['credits'] = 10;
+                    $updateData['daily_limit'] = 10;
+                    $updateData['user_type'] = 'free';
+                }
+                
+                $result = $db->update('users', $updateData, "id = $user_id");
+                jsonResponse($result, $result ? 'อัปเดตสมาชิกสำเร็จ' : 'เกิดข้อผิดพลาด');
+                break;
+                
+            case 'delete_user':
+                $user_id = intval($_POST['user_id']);
+                $result = $db->update('users', [
+                    'status' => 'deleted',
+                    'updated_at' => date('Y-m-d H:i:s')
+                ], "id = $user_id");
+                jsonResponse($result, $result ? 'ลบผู้ใช้สำเร็จ' : 'เกิดข้อผิดพลาด');
+                break;
+                
             case 'save_settings':
                 $success = true;
                 foreach ($_POST['settings'] as $key => $value) {
@@ -716,6 +803,132 @@ $pageData = [
             color: #ff6b6b;
         }
         
+        /* User Management Styles */
+        .user-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .user-filters input,
+        .user-filters select {
+            padding: 10px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .user-filters input {
+            min-width: 250px;
+            flex: 1;
+        }
+        
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .users-table th,
+        .users-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e1e5e9;
+        }
+        
+        .users-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .users-table tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .member-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .member-badge.free {
+            background: rgba(108, 117, 125, 0.1);
+            color: #6c757d;
+        }
+        
+        .member-badge.monthly {
+            background: rgba(0, 123, 255, 0.1);
+            color: #007bff;
+        }
+        
+        .member-badge.yearly {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #e1e5e9;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination button:hover,
+        .pagination button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .placeholder-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+        }
+        
+        .placeholder-message i {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+            opacity: 0.5;
+        }
+        
+        .placeholder-message p {
+            font-size: 1.1em;
+            color: #64748b;
+        }
+        
         @media (max-width: 768px) {
             .admin-container {
                 padding: 10px;
@@ -760,6 +973,24 @@ $pageData = [
             .stats-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .users-table {
+                font-size: 12px;
+            }
+            
+            .users-table th,
+            .users-table td {
+                padding: 10px 8px;
+            }
+            
+            .user-filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .user-filters input {
+                min-width: auto;
+            }
         }
     </style>
 </head>
@@ -776,6 +1007,10 @@ $pageData = [
         <div class="admin-nav">
             <button class="nav-btn active" onclick="showSection('dashboard')">
                 <i class="fas fa-chart-bar"></i> Dashboard
+            </button>
+            <button class="nav-btn" onclick="showSection('users')">
+
+                <i class="fas fa-users"></i> จัดการสมาชิก
             </button>
             <button class="nav-btn" onclick="showSection('examples')">
                 <i class="fas fa-star"></i> Prompt ยอดนิยม
@@ -814,6 +1049,49 @@ $pageData = [
                     <span class="stat-number" id="today-prompts"><?php echo $pageData['stats']['today_prompts']; ?></span>
                     <div class="stat-label">Prompt วันนี้</div>
                 </div>
+            </div>
+        </div>
+        
+        <!-- User Management Section -->
+        <div id="users" class="admin-section">
+            <div class="section-title">
+                <span><i class="fas fa-users"></i> จัดการสมาชิก</span>
+            </div>
+            
+            <div class="user-filters">
+                <input type="text" id="user-search" placeholder="ค้นหาสมาชิก (username, email, ชื่อ)">
+                <select id="user-filter">
+                    <option value="all">ทุกประเภท</option>
+                    <option value="free">สมาชิกฟรี</option>
+                    <option value="monthly">รายเดือน</option>
+                    <option value="yearly">รายปี</option>
+                </select>
+                <button class="btn" onclick="searchUsers()">
+                    <i class="fas fa-search"></i> ค้นหา
+                </button>
+            </div>
+            
+            <table class="users-table" id="users-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Avatar</th>
+                        <th>Username</th>
+                        <th>ชื่อ-สกุล</th>
+                        <th>Email</th>
+                        <th>ประเภทสมาชิก</th>
+                        <th>วันหมดอายุ</th>
+                        <th>สร้างเมื่อ</th>
+                        <th>จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="users-tbody">
+                    <!-- Users will be loaded here -->
+                </tbody>
+            </table>
+            
+            <div class="pagination" id="users-pagination">
+                <!-- Pagination will be loaded here -->
             </div>
         </div>
         
@@ -903,6 +1181,39 @@ $pageData = [
         </div>
     </div>
     
+    <!-- User Edit Modal -->
+    <div id="user-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('user-modal')">&times;</button>
+            <div class="modal-header">
+                <i class="fas fa-user-edit"></i> <span id="user-modal-title">แก้ไขข้อมูลสมาชิก</span>
+            </div>
+            
+            <div id="user-info-display" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                <!-- User info will be displayed here -->
+            </div>
+            
+            <div class="form-group">
+                <label>ประเภทสมาชิก</label>
+                <select id="user-member-type">
+                    <option value="free">สมาชิกฟรี</option>
+                    <option value="monthly">สมาชิกรายเดือน</option>
+                    <option value="yearly">สมาชิกรายปี</option>
+                </select>
+            </div>
+            
+            <div class="form-group" id="expire-date-group">
+                <label>วันหมดอายุ</label>
+                <input type="date" id="user-expire-date">
+                <small style="color: #666;">สำหรับสมาชิกรายเดือน/รายปี</small>
+            </div>
+            
+            <button class="btn btn-success" onclick="saveUserMembership()">
+                <i class="fas fa-save"></i> บันทึกการเปลี่ยนแปลง
+            </button>
+        </div>
+    </div>
+    
     <!-- Example Modal -->
     <div id="example-modal" class="modal">
         <div class="modal-content">
@@ -978,6 +1289,8 @@ $pageData = [
         let galleryData = <?php echo json_encode($pageData['gallery']); ?>;
         let currentEditingExample = null;
         let currentEditingGallery = null;
+        let currentEditingUser = null;
+        let currentPage = 1;
         
         // Navigation
         function showSection(sectionId) {
@@ -1004,6 +1317,251 @@ $pageData = [
                 loadGallery();
             } else if (sectionId === 'dashboard') {
                 updateStats();
+            } else if (sectionId === 'users') {
+                loadUsers();
+            }
+        }
+        
+        // User Management Functions
+        function loadUsers(page = 1) {
+            currentPage = page;
+            const search = document.getElementById('user-search')?.value || '';
+            const filter = document.getElementById('user-filter')?.value || 'all';
+            
+            const formData = new FormData();
+            formData.append('action', 'get_users');
+            formData.append('page', page);
+            formData.append('search', search);
+            formData.append('filter', filter);
+            
+            fetch('admin.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    renderUsersTable(data.data.users);
+                    renderPagination(data.data.page, data.data.pages);
+                } else {
+                    showAlert('error', data.message);
+                }
+            })
+            .catch(error => {
+                showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
+                console.error('Error:', error);
+            });
+        }
+        
+        function renderUsersTable(users) {
+            const tbody = document.getElementById('users-tbody');
+            tbody.innerHTML = '';
+            
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="placeholder-message"><i class="fas fa-users"></i><p>ไม่พบข้อมูลสมาชิก</p></td></tr>';
+                return;
+            }
+            
+            users.forEach(user => {
+                const memberBadgeClass = user.member_type === 'free' ? 'free' : 
+                                       user.member_type === 'monthly' ? 'monthly' : 'yearly';
+                
+                const memberLabel = user.member_type === 'free' ? 'ฟรี' :
+                                  user.member_type === 'monthly' ? 'รายเดือน' : 'รายปี';
+                
+                const avatar = user.avatar_url || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
+                const expireDate = user.expire_date ? new Date(user.expire_date).toLocaleDateString('th-TH') : '-';
+                const createdDate = new Date(user.created_at).toLocaleDateString('th-TH');
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td><img src="${avatar}" class="user-avatar" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'"></td>
+                    <td><strong>${user.username}</strong></td>
+                    <td>${user.full_name}</td>
+                    <td>${user.email}</td>
+                    <td><span class="member-badge ${memberBadgeClass}">${memberLabel}</span></td>
+                    <td>${expireDate}</td>
+                    <td>${createdDate}</td>
+                    <td>
+                        <button class="btn" onclick="editUser(${user.id})" style="padding: 8px 12px; font-size: 12px; margin-right: 5px;">
+                            <i class="fas fa-edit"></i> แก้ไข
+                        </button>
+                        ${user.id !== 1 ? `<button class="btn btn-danger" onclick="deleteUser(${user.id})" style="padding: 8px 12px; font-size: 12px;">
+                            <i class="fas fa-trash"></i> ลบ
+                        </button>` : ''}
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        function renderPagination(currentPage, totalPages) {
+            const pagination = document.getElementById('users-pagination');
+            pagination.innerHTML = '';
+            
+            if (totalPages <= 1) return;
+            
+            // Previous button
+            const prevBtn = document.createElement('button');
+            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => loadUsers(currentPage - 1);
+            pagination.appendChild(prevBtn);
+            
+            // Page numbers
+            for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+                let page = i;
+                if (totalPages > 5) {
+                    if (currentPage > 3) {
+                        page = currentPage - 2 + i - 1;
+                        if (page > totalPages) break;
+                    }
+                }
+                
+                const pageBtn = document.createElement('button');
+                pageBtn.textContent = page;
+                pageBtn.className = page === currentPage ? 'active' : '';
+                pageBtn.onclick = () => loadUsers(page);
+                pagination.appendChild(pageBtn);
+            }
+            
+            // Next button
+            const nextBtn = document.createElement('button');
+            nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => loadUsers(currentPage + 1);
+            pagination.appendChild(nextBtn);
+        }
+        
+        function searchUsers() {
+            loadUsers(1);
+        }
+        
+        function editUser(userId) {
+            currentEditingUser = userId;
+            
+            // Get user data
+            const formData = new FormData();
+            formData.append('action', 'get_user');
+            formData.append('user_id', userId);
+            
+            fetch('admin.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const user = data.data;
+                    
+                    // Display user info
+                    document.getElementById('user-info-display').innerHTML = `
+                        <strong>ข้อมูลสมาชิก:</strong><br>
+                        <strong>ID:</strong> ${user.id}<br>
+                        <strong>Username:</strong> ${user.username}<br>
+                        <strong>ชื่อ-สกุล:</strong> ${user.full_name}<br>
+                        <strong>Email:</strong> ${user.email}
+                    `;
+                    
+                    // Set current values
+                    document.getElementById('user-member-type').value = user.member_type;
+                    document.getElementById('user-expire-date').value = user.expire_date || '';
+                    
+                    // Handle expire date visibility
+                    handleMemberTypeChange();
+                    
+                    // Show modal
+                    document.getElementById('user-modal').classList.add('active');
+                } else {
+                    showAlert('error', data.message);
+                }
+            })
+            .catch(error => {
+                showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
+                console.error('Error:', error);
+            });
+        }
+        
+        function handleMemberTypeChange() {
+            const memberType = document.getElementById('user-member-type').value;
+            const expireDateGroup = document.getElementById('expire-date-group');
+            const expireDateInput = document.getElementById('user-expire-date');
+            
+            if (memberType === 'free') {
+                expireDateGroup.style.display = 'none';
+                expireDateInput.value = '';
+            } else {
+                expireDateGroup.style.display = 'block';
+                
+                // Set default expire date if empty
+                if (!expireDateInput.value) {
+                    const today = new Date();
+                    if (memberType === 'monthly') {
+                        today.setMonth(today.getMonth() + 1);
+                    } else if (memberType === 'yearly') {
+                        today.setFullYear(today.getFullYear() + 1);
+                    }
+                    expireDateInput.value = today.toISOString().split('T')[0];
+                }
+            }
+        }
+        
+        function saveUserMembership() {
+            if (!currentEditingUser) return;
+            
+            const memberType = document.getElementById('user-member-type').value;
+            const expireDate = document.getElementById('user-expire-date').value;
+            
+            const formData = new FormData();
+            formData.append('action', 'update_user_membership');
+            formData.append('user_id', currentEditingUser);
+            formData.append('member_type', memberType);
+            formData.append('expire_date', expireDate);
+            
+            fetch('admin.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeModal('user-modal');
+                    loadUsers(currentPage);
+                    showAlert('success', data.message);
+                } else {
+                    showAlert('error', data.message);
+                }
+            })
+            .catch(error => {
+                showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
+                console.error('Error:', error);
+            });
+        }
+        
+        function deleteUser(userId) {
+            if (confirm('คุณแน่ใจหรือไม่ที่จะลบผู้ใช้นี้?')) {
+                const formData = new FormData();
+                formData.append('action', 'delete_user');
+                formData.append('user_id', userId);
+                
+                fetch('admin.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        loadUsers(currentPage);
+                        showAlert('success', data.message);
+                    } else {
+                        showAlert('error', data.message);
+                    }
+                })
+                .catch(error => {
+                    showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
+                    console.error('Error:', error);
+                });
             }
         }
         
@@ -1424,6 +1982,22 @@ $pageData = [
         // Initialize
         window.addEventListener('DOMContentLoaded', function() {
             loadExamples();
+            
+            // Add search event listener
+            const searchInput = document.getElementById('user-search');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        searchUsers();
+                    }
+                });
+            }
+            
+            // Add member type change event listener
+            const memberTypeSelect = document.getElementById('user-member-type');
+            if (memberTypeSelect) {
+                memberTypeSelect.addEventListener('change', handleMemberTypeChange);
+            }
         });
         
         // Close modals when clicking outside
@@ -1444,27 +2018,6 @@ $pageData = [
         
         // Auto refresh every 30 seconds
         setInterval(refreshData, 30000);
-        
-        // Add placeholder style
-        const style = document.createElement('style');
-        style.textContent = `
-            .placeholder-message {
-                text-align: center;
-                padding: 60px 20px;
-                color: #94a3b8;
-            }
-            .placeholder-message i {
-                font-size: 3em;
-                margin-bottom: 15px;
-                display: block;
-                opacity: 0.5;
-            }
-            .placeholder-message p {
-                font-size: 1.1em;
-                color: #64748b;
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
