@@ -1,0 +1,816 @@
+[01-Jun-2025 15:52:20 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 15:52:20 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 15:52:20 Asia/Bangkok] Session User ID: none
+[01-Jun-2025 15:52:20 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 15:52:20 Asia/Bangkok] Raw JSON input: {"subject":"ปลานีโม่","content_type":"","style":"","scene":"","details":"","generated_prompt":"ปลานีโม่, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 15:52:20 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => ปลานีโม่
+    [content_type] => 
+    [style] => 
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 15:52:20 Asia/Bangkok] User ID: null
+[01-Jun-2025 15:52:20 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 15:52:20 Asia/Bangkok] Limit: 5
+[01-Jun-2025 15:52:20 Asia/Bangkok] Where clause: (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 15:52:20 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 15:52:20 Asia/Bangkok] Current count: 5
+[01-Jun-2025 15:52:20 Asia/Bangkok] Limit exceeded. Status: ผู้ใช้ทั่วไป
+[01-Jun-2025 15:52:53 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 15:52:53 Asia/Bangkok] Session ID: 2vo6hcai9ub16f74te0n78g00b
+[01-Jun-2025 15:52:53 Asia/Bangkok] Session User ID: none
+[01-Jun-2025 15:52:53 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 15:52:53 Asia/Bangkok] Raw JSON input: {"subject":"รถบัส","content_type":"automotive photography","style":"cinematic","scene":"","details":"","generated_prompt":"รถบัส, automotive photography, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 15:52:53 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => รถบัส
+    [content_type] => automotive photography
+    [style] => cinematic
+    [scene] => 
+    [details] => 
+    [generated_prompt] => รถบัส, automotive photography, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 15:52:53 Asia/Bangkok] User ID: null
+[01-Jun-2025 15:52:53 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 15:52:53 Asia/Bangkok] Limit: 5
+[01-Jun-2025 15:52:53 Asia/Bangkok] Where clause: (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 15:52:53 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 15:52:53 Asia/Bangkok] Current count: 5
+[01-Jun-2025 15:52:53 Asia/Bangkok] Limit exceeded. Status: ผู้ใช้ทั่วไป
+[01-Jun-2025 15:53:04 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 15:53:04 Asia/Bangkok] Session ID: 2vo6hcai9ub16f74te0n78g00b
+[01-Jun-2025 15:53:04 Asia/Bangkok] Session User ID: none
+[01-Jun-2025 15:53:04 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 15:53:04 Asia/Bangkok] Raw JSON input: {"subject":"รถบัส","content_type":"landscape photography","style":"anime style","scene":"","details":"","generated_prompt":"รถบัส, landscape photography, anime style style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 15:53:04 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => รถบัส
+    [content_type] => landscape photography
+    [style] => anime style
+    [scene] => 
+    [details] => 
+    [generated_prompt] => รถบัส, landscape photography, anime style style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 15:53:04 Asia/Bangkok] User ID: null
+[01-Jun-2025 15:53:04 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 15:53:04 Asia/Bangkok] Limit: 5
+[01-Jun-2025 15:53:04 Asia/Bangkok] Where clause: (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 15:53:04 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 15:53:04 Asia/Bangkok] Current count: 5
+[01-Jun-2025 15:53:04 Asia/Bangkok] Limit exceeded. Status: ผู้ใช้ทั่วไป
+[01-Jun-2025 15:55:18 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 15:55:18 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 15:55:18 Asia/Bangkok] Session User ID: none
+[01-Jun-2025 15:55:18 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 15:55:18 Asia/Bangkok] Raw JSON input: {"subject":"ผู้หญิงหน้าตาสวย อีสาน","content_type":"product photography","style":"fantasy art","scene":"","details":"","generated_prompt":"ผู้หญิงหน้าตาสวย อีสาน, product photography, fantasy art style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 15:55:18 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => ผู้หญิงหน้าตาสวย อีสาน
+    [content_type] => product photography
+    [style] => fantasy art
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ผู้หญิงหน้าตาสวย อีสาน, product photography, fantasy art style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 15:55:18 Asia/Bangkok] User ID: null
+[01-Jun-2025 15:55:18 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 15:55:18 Asia/Bangkok] Limit: 5
+[01-Jun-2025 15:55:18 Asia/Bangkok] Where clause: (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 15:55:18 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 15:55:18 Asia/Bangkok] Current count: 5
+[01-Jun-2025 15:55:18 Asia/Bangkok] Limit exceeded. Status: ผู้ใช้ทั่วไป
+[01-Jun-2025 16:02:01 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:02:01 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 16:02:01 Asia/Bangkok] Session User ID: none
+[01-Jun-2025 16:02:01 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:02:01 Asia/Bangkok] Raw JSON input: {"subject":"as","content_type":"landscape photography","style":"","scene":"","details":"","generated_prompt":"as, landscape photography, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:02:01 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => as
+    [content_type] => landscape photography
+    [style] => 
+    [scene] => 
+    [details] => 
+    [generated_prompt] => as, landscape photography, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:02:01 Asia/Bangkok] User ID: null
+[01-Jun-2025 16:02:01 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:02:01 Asia/Bangkok] Limit: 5
+[01-Jun-2025 16:02:01 Asia/Bangkok] Where clause: (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:02:01 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:02:01 Asia/Bangkok] Current count: 5
+[01-Jun-2025 16:02:01 Asia/Bangkok] Limit exceeded. Status: ผู้ใช้ทั่วไป
+[01-Jun-2025 16:20:25 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:20:25 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 16:20:25 Asia/Bangkok] Session User ID: none
+[01-Jun-2025 16:20:25 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:20:25 Asia/Bangkok] Raw JSON input: {"subject":"ปลานีโม่","content_type":"landscape photography","style":"minimalist","scene":"","details":"","generated_prompt":"ปลานีโม่, landscape photography, minimalist style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:20:25 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => ปลานีโม่
+    [content_type] => landscape photography
+    [style] => minimalist
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, landscape photography, minimalist style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:20:25 Asia/Bangkok] User ID: null
+[01-Jun-2025 16:20:25 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:20:25 Asia/Bangkok] Limit: 5
+[01-Jun-2025 16:20:25 Asia/Bangkok] Where clause: (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:20:25 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:20:25 Asia/Bangkok] Current count: 5
+[01-Jun-2025 16:20:25 Asia/Bangkok] Limit exceeded. Status: ผู้ใช้ทั่วไป
+[01-Jun-2025 16:21:01 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:21:01 Asia/Bangkok] Session ID: kd0o92s2u1hgjf54dba55gm982
+[01-Jun-2025 16:21:01 Asia/Bangkok] Session User ID: none
+[01-Jun-2025 16:21:01 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:21:01 Asia/Bangkok] Raw JSON input: {"subject":"รถเรือ","content_type":"automotive photography","style":"","scene":"","details":"","generated_prompt":"รถเรือ, automotive photography, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:21:01 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => รถเรือ
+    [content_type] => automotive photography
+    [style] => 
+    [scene] => 
+    [details] => 
+    [generated_prompt] => รถเรือ, automotive photography, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:21:01 Asia/Bangkok] User ID: null
+[01-Jun-2025 16:21:01 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:21:01 Asia/Bangkok] Limit: 5
+[01-Jun-2025 16:21:01 Asia/Bangkok] Where clause: (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:21:01 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:21:01 Asia/Bangkok] Current count: 5
+[01-Jun-2025 16:21:01 Asia/Bangkok] Limit exceeded. Status: ผู้ใช้ทั่วไป
+[01-Jun-2025 16:21:46 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:21:46 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 16:21:46 Asia/Bangkok] Session User ID: 8
+[01-Jun-2025 16:21:46 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:21:46 Asia/Bangkok] Raw JSON input: {"subject":"ปลานีโม่","content_type":"landscape photography","style":"","scene":"","details":"","generated_prompt":"ปลานีโม่, landscape photography, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:21:46 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => ปลานีโม่
+    [content_type] => landscape photography
+    [style] => 
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, landscape photography, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:21:46 Asia/Bangkok] User ID: 8
+[01-Jun-2025 16:21:46 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:21:46 Asia/Bangkok] Member type: free
+[01-Jun-2025 16:21:46 Asia/Bangkok] Limit: 10
+[01-Jun-2025 16:21:46 Asia/Bangkok] Where clause: user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:21:46 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:21:46 Asia/Bangkok] Current count: 0
+[01-Jun-2025 16:21:46 Asia/Bangkok] Save data: Array
+(
+    [user_id] => 8
+    [subject] => ปลานีโม่
+    [content_type] => landscape photography
+    [style] => 
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, landscape photography, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+    [ip_address] => 184.22.182.242
+    [user_agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36
+)
+
+[01-Jun-2025 16:21:46 Asia/Bangkok] Save result: success
+[01-Jun-2025 16:21:46 Asia/Bangkok] Success message: บันทึก Prompt สำเร็จ - เหลือสิทธิ์ 9 ครั้ง สำหรับวันนี้
+[01-Jun-2025 16:21:51 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:21:51 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 16:21:51 Asia/Bangkok] Session User ID: 8
+[01-Jun-2025 16:21:51 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:21:51 Asia/Bangkok] Raw JSON input: {"subject":"ปลานีโม่","content_type":"abstract art","style":"","scene":"","details":"","generated_prompt":"ปลานีโม่, abstract art, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:21:51 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => ปลานีโม่
+    [content_type] => abstract art
+    [style] => 
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, abstract art, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:21:51 Asia/Bangkok] User ID: 8
+[01-Jun-2025 16:21:51 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:21:51 Asia/Bangkok] Member type: free
+[01-Jun-2025 16:21:51 Asia/Bangkok] Limit: 10
+[01-Jun-2025 16:21:51 Asia/Bangkok] Where clause: user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:21:51 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:21:51 Asia/Bangkok] Current count: 1
+[01-Jun-2025 16:21:51 Asia/Bangkok] Save data: Array
+(
+    [user_id] => 8
+    [subject] => ปลานีโม่
+    [content_type] => abstract art
+    [style] => 
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, abstract art, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+    [ip_address] => 184.22.182.242
+    [user_agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36
+)
+
+[01-Jun-2025 16:21:51 Asia/Bangkok] Save result: success
+[01-Jun-2025 16:21:51 Asia/Bangkok] Success message: บันทึก Prompt สำเร็จ - เหลือสิทธิ์ 8 ครั้ง สำหรับวันนี้
+[01-Jun-2025 16:21:55 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:21:55 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 16:21:55 Asia/Bangkok] Session User ID: 8
+[01-Jun-2025 16:21:55 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:21:55 Asia/Bangkok] Raw JSON input: {"subject":"ปลานีโม่","content_type":"abstract art","style":"minimalist","scene":"","details":"","generated_prompt":"ปลานีโม่, abstract art, minimalist style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:21:55 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => ปลานีโม่
+    [content_type] => abstract art
+    [style] => minimalist
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, abstract art, minimalist style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:21:55 Asia/Bangkok] User ID: 8
+[01-Jun-2025 16:21:55 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:21:55 Asia/Bangkok] Member type: free
+[01-Jun-2025 16:21:55 Asia/Bangkok] Limit: 10
+[01-Jun-2025 16:21:55 Asia/Bangkok] Where clause: user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:21:55 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:21:55 Asia/Bangkok] Current count: 2
+[01-Jun-2025 16:21:55 Asia/Bangkok] Save data: Array
+(
+    [user_id] => 8
+    [subject] => ปลานีโม่
+    [content_type] => abstract art
+    [style] => minimalist
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, abstract art, minimalist style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+    [ip_address] => 184.22.182.242
+    [user_agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36
+)
+
+[01-Jun-2025 16:21:55 Asia/Bangkok] Save result: success
+[01-Jun-2025 16:21:55 Asia/Bangkok] Success message: บันทึก Prompt สำเร็จ - เหลือสิทธิ์ 7 ครั้ง สำหรับวันนี้
+[01-Jun-2025 16:22:01 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:22:01 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 16:22:01 Asia/Bangkok] Session User ID: 8
+[01-Jun-2025 16:22:01 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:22:01 Asia/Bangkok] Raw JSON input: {"subject":"ปลานีโม่","content_type":"portrait photography","style":"minimalist","scene":"","details":"","generated_prompt":"ปลานีโม่, portrait photography, minimalist style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:22:01 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => ปลานีโม่
+    [content_type] => portrait photography
+    [style] => minimalist
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, portrait photography, minimalist style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:22:01 Asia/Bangkok] User ID: 8
+[01-Jun-2025 16:22:01 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:22:01 Asia/Bangkok] Member type: free
+[01-Jun-2025 16:22:01 Asia/Bangkok] Limit: 10
+[01-Jun-2025 16:22:01 Asia/Bangkok] Where clause: user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:01 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:01 Asia/Bangkok] Current count: 3
+[01-Jun-2025 16:22:01 Asia/Bangkok] Save data: Array
+(
+    [user_id] => 8
+    [subject] => ปลานีโม่
+    [content_type] => portrait photography
+    [style] => minimalist
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, portrait photography, minimalist style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+    [ip_address] => 184.22.182.242
+    [user_agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36
+)
+
+[01-Jun-2025 16:22:01 Asia/Bangkok] Save result: success
+[01-Jun-2025 16:22:01 Asia/Bangkok] Success message: บันทึก Prompt สำเร็จ - เหลือสิทธิ์ 6 ครั้ง สำหรับวันนี้
+[01-Jun-2025 16:22:04 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:22:04 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 16:22:04 Asia/Bangkok] Session User ID: 8
+[01-Jun-2025 16:22:04 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:22:04 Asia/Bangkok] Raw JSON input: {"subject":"ปลานีโม่","content_type":"portrait photography","style":"photorealistic","scene":"","details":"","generated_prompt":"ปลานีโม่, portrait photography, photorealistic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:22:04 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => ปลานีโม่
+    [content_type] => portrait photography
+    [style] => photorealistic
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, portrait photography, photorealistic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:22:04 Asia/Bangkok] User ID: 8
+[01-Jun-2025 16:22:04 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:22:04 Asia/Bangkok] Member type: free
+[01-Jun-2025 16:22:04 Asia/Bangkok] Limit: 10
+[01-Jun-2025 16:22:04 Asia/Bangkok] Where clause: user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:04 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:04 Asia/Bangkok] Current count: 4
+[01-Jun-2025 16:22:04 Asia/Bangkok] Save data: Array
+(
+    [user_id] => 8
+    [subject] => ปลานีโม่
+    [content_type] => portrait photography
+    [style] => photorealistic
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, portrait photography, photorealistic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+    [ip_address] => 184.22.182.242
+    [user_agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36
+)
+
+[01-Jun-2025 16:22:04 Asia/Bangkok] Save result: success
+[01-Jun-2025 16:22:04 Asia/Bangkok] Success message: บันทึก Prompt สำเร็จ - เหลือสิทธิ์ 5 ครั้ง สำหรับวันนี้
+[01-Jun-2025 16:22:08 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:22:08 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 16:22:08 Asia/Bangkok] Session User ID: 8
+[01-Jun-2025 16:22:08 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:22:08 Asia/Bangkok] Raw JSON input: {"subject":"ปลานีโม่","content_type":"","style":"photorealistic","scene":"","details":"","generated_prompt":"ปลานีโม่, photorealistic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:22:08 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => ปลานีโม่
+    [content_type] => 
+    [style] => photorealistic
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, photorealistic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:22:08 Asia/Bangkok] User ID: 8
+[01-Jun-2025 16:22:08 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:22:08 Asia/Bangkok] Member type: free
+[01-Jun-2025 16:22:08 Asia/Bangkok] Limit: 10
+[01-Jun-2025 16:22:08 Asia/Bangkok] Where clause: user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:08 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:08 Asia/Bangkok] Current count: 5
+[01-Jun-2025 16:22:08 Asia/Bangkok] Save data: Array
+(
+    [user_id] => 8
+    [subject] => ปลานีโม่
+    [content_type] => 
+    [style] => photorealistic
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, photorealistic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+    [ip_address] => 184.22.182.242
+    [user_agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36
+)
+
+[01-Jun-2025 16:22:08 Asia/Bangkok] Save result: success
+[01-Jun-2025 16:22:08 Asia/Bangkok] Success message: บันทึก Prompt สำเร็จ - เหลือสิทธิ์ 4 ครั้ง สำหรับวันนี้
+[01-Jun-2025 16:22:10 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:22:10 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 16:22:10 Asia/Bangkok] Session User ID: 8
+[01-Jun-2025 16:22:10 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:22:10 Asia/Bangkok] Raw JSON input: {"subject":"ปลานีโม่","content_type":"","style":"cyberpunk","scene":"","details":"","generated_prompt":"ปลานีโม่, cyberpunk style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:22:10 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => ปลานีโม่
+    [content_type] => 
+    [style] => cyberpunk
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, cyberpunk style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:22:10 Asia/Bangkok] User ID: 8
+[01-Jun-2025 16:22:10 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:22:10 Asia/Bangkok] Member type: free
+[01-Jun-2025 16:22:10 Asia/Bangkok] Limit: 10
+[01-Jun-2025 16:22:10 Asia/Bangkok] Where clause: user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:10 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:10 Asia/Bangkok] Current count: 6
+[01-Jun-2025 16:22:10 Asia/Bangkok] Save data: Array
+(
+    [user_id] => 8
+    [subject] => ปลานีโม่
+    [content_type] => 
+    [style] => cyberpunk
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, cyberpunk style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+    [ip_address] => 184.22.182.242
+    [user_agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36
+)
+
+[01-Jun-2025 16:22:10 Asia/Bangkok] Save result: success
+[01-Jun-2025 16:22:10 Asia/Bangkok] Success message: บันทึก Prompt สำเร็จ - เหลือสิทธิ์ 3 ครั้ง สำหรับวันนี้
+[01-Jun-2025 16:22:13 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:22:13 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 16:22:13 Asia/Bangkok] Session User ID: 8
+[01-Jun-2025 16:22:13 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:22:13 Asia/Bangkok] Raw JSON input: {"subject":"ปลานีโม่","content_type":"","style":"cinematic","scene":"","details":"","generated_prompt":"ปลานีโม่, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:22:13 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => ปลานีโม่
+    [content_type] => 
+    [style] => cinematic
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:22:13 Asia/Bangkok] User ID: 8
+[01-Jun-2025 16:22:13 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:22:13 Asia/Bangkok] Member type: free
+[01-Jun-2025 16:22:13 Asia/Bangkok] Limit: 10
+[01-Jun-2025 16:22:13 Asia/Bangkok] Where clause: user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:13 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:13 Asia/Bangkok] Current count: 7
+[01-Jun-2025 16:22:13 Asia/Bangkok] Save data: Array
+(
+    [user_id] => 8
+    [subject] => ปลานีโม่
+    [content_type] => 
+    [style] => cinematic
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+    [ip_address] => 184.22.182.242
+    [user_agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36
+)
+
+[01-Jun-2025 16:22:13 Asia/Bangkok] Save result: success
+[01-Jun-2025 16:22:13 Asia/Bangkok] Success message: บันทึก Prompt สำเร็จ - เหลือสิทธิ์ 2 ครั้ง สำหรับวันนี้
+[01-Jun-2025 16:22:15 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:22:15 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 16:22:15 Asia/Bangkok] Session User ID: 8
+[01-Jun-2025 16:22:15 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:22:15 Asia/Bangkok] Raw JSON input: {"subject":"ปลานีโม่","content_type":"abstract art","style":"cinematic","scene":"","details":"","generated_prompt":"ปลานีโม่, abstract art, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:22:15 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => ปลานีโม่
+    [content_type] => abstract art
+    [style] => cinematic
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, abstract art, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:22:15 Asia/Bangkok] User ID: 8
+[01-Jun-2025 16:22:15 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:22:15 Asia/Bangkok] Member type: free
+[01-Jun-2025 16:22:15 Asia/Bangkok] Limit: 10
+[01-Jun-2025 16:22:15 Asia/Bangkok] Where clause: user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:15 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:15 Asia/Bangkok] Current count: 8
+[01-Jun-2025 16:22:15 Asia/Bangkok] Save data: Array
+(
+    [user_id] => 8
+    [subject] => ปลานีโม่
+    [content_type] => abstract art
+    [style] => cinematic
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, abstract art, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+    [ip_address] => 184.22.182.242
+    [user_agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36
+)
+
+[01-Jun-2025 16:22:15 Asia/Bangkok] Save result: success
+[01-Jun-2025 16:22:15 Asia/Bangkok] Success message: บันทึก Prompt สำเร็จ - เหลือสิทธิ์ 1 ครั้ง สำหรับวันนี้
+[01-Jun-2025 16:22:20 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:22:20 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 16:22:20 Asia/Bangkok] Session User ID: 8
+[01-Jun-2025 16:22:20 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:22:20 Asia/Bangkok] Raw JSON input: {"subject":"ปลานีโม่","content_type":"automotive photography","style":"cyberpunk","scene":"","details":"","generated_prompt":"ปลานีโม่, automotive photography, cyberpunk style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:22:20 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => ปลานีโม่
+    [content_type] => automotive photography
+    [style] => cyberpunk
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, automotive photography, cyberpunk style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:22:20 Asia/Bangkok] User ID: 8
+[01-Jun-2025 16:22:20 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:22:20 Asia/Bangkok] Member type: free
+[01-Jun-2025 16:22:20 Asia/Bangkok] Limit: 10
+[01-Jun-2025 16:22:20 Asia/Bangkok] Where clause: user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:20 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:20 Asia/Bangkok] Current count: 9
+[01-Jun-2025 16:22:20 Asia/Bangkok] Save data: Array
+(
+    [user_id] => 8
+    [subject] => ปลานีโม่
+    [content_type] => automotive photography
+    [style] => cyberpunk
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, automotive photography, cyberpunk style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+    [ip_address] => 184.22.182.242
+    [user_agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36
+)
+
+[01-Jun-2025 16:22:20 Asia/Bangkok] Save result: success
+[01-Jun-2025 16:22:20 Asia/Bangkok] Success message: บันทึก Prompt สำเร็จ - เหลือสิทธิ์ 0 ครั้ง สำหรับวันนี้
+[01-Jun-2025 16:22:23 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:22:23 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 16:22:23 Asia/Bangkok] Session User ID: 8
+[01-Jun-2025 16:22:23 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:22:23 Asia/Bangkok] Raw JSON input: {"subject":"ปลานีโม่","content_type":"portrait photography","style":"cyberpunk","scene":"","details":"","generated_prompt":"ปลานีโม่, portrait photography, cyberpunk style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:22:23 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => ปลานีโม่
+    [content_type] => portrait photography
+    [style] => cyberpunk
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ปลานีโม่, portrait photography, cyberpunk style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:22:23 Asia/Bangkok] User ID: 8
+[01-Jun-2025 16:22:23 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:22:23 Asia/Bangkok] Member type: free
+[01-Jun-2025 16:22:23 Asia/Bangkok] Limit: 10
+[01-Jun-2025 16:22:23 Asia/Bangkok] Where clause: user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:23 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:23 Asia/Bangkok] Current count: 10
+[01-Jun-2025 16:22:23 Asia/Bangkok] Limit exceeded. Status: สมาชิกฟรี
+[01-Jun-2025 16:22:37 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:22:37 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 16:22:37 Asia/Bangkok] Session User ID: 8
+[01-Jun-2025 16:22:37 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:22:37 Asia/Bangkok] Raw JSON input: {"subject":"ผู้หญิงหน้าตาสวย อีสาน","content_type":"","style":"","scene":"","details":"","generated_prompt":"ผู้หญิงหน้าตาสวย อีสาน, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:22:37 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => ผู้หญิงหน้าตาสวย อีสาน
+    [content_type] => 
+    [style] => 
+    [scene] => 
+    [details] => 
+    [generated_prompt] => ผู้หญิงหน้าตาสวย อีสาน, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:22:37 Asia/Bangkok] User ID: 8
+[01-Jun-2025 16:22:37 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:22:37 Asia/Bangkok] Member type: free
+[01-Jun-2025 16:22:37 Asia/Bangkok] Limit: 10
+[01-Jun-2025 16:22:37 Asia/Bangkok] Where clause: user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:37 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE user_id = 8 AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:22:37 Asia/Bangkok] Current count: 10
+[01-Jun-2025 16:22:37 Asia/Bangkok] Limit exceeded. Status: สมาชิกฟรี
+[01-Jun-2025 16:40:42 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:40:42 Asia/Bangkok] Session ID: 2vo6hcai9ub16f74te0n78g00b
+[01-Jun-2025 16:40:42 Asia/Bangkok] Session User ID: none
+[01-Jun-2025 16:40:42 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:40:42 Asia/Bangkok] Raw JSON input: {"subject":"รถบัส","content_type":"","style":"","scene":"","details":"","generated_prompt":"รถบัส, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:40:42 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => รถบัส
+    [content_type] => 
+    [style] => 
+    [scene] => 
+    [details] => 
+    [generated_prompt] => รถบัส, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:40:42 Asia/Bangkok] User ID: null
+[01-Jun-2025 16:40:42 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:40:42 Asia/Bangkok] Limit: 5
+[01-Jun-2025 16:40:42 Asia/Bangkok] Where clause: (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:40:42 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:40:42 Asia/Bangkok] Current count: 5
+[01-Jun-2025 16:40:42 Asia/Bangkok] Limit exceeded. Status: ผู้ใช้ทั่วไป
+[01-Jun-2025 16:50:53 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:50:53 Asia/Bangkok] Session ID: kf8lieartpan309pc8m57n1954
+[01-Jun-2025 16:50:53 Asia/Bangkok] Session User ID: none
+[01-Jun-2025 16:50:53 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:50:53 Asia/Bangkok] Raw JSON input: {"subject":"รถยนต์ติดปีก","content_type":"automotive photography","style":"cinematic","scene":"","details":"","generated_prompt":"รถยนต์ติดปีก, automotive photography, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:50:53 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => รถยนต์ติดปีก
+    [content_type] => automotive photography
+    [style] => cinematic
+    [scene] => 
+    [details] => 
+    [generated_prompt] => รถยนต์ติดปีก, automotive photography, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:50:53 Asia/Bangkok] User ID: null
+[01-Jun-2025 16:50:53 Asia/Bangkok] IP Address: 49.237.46.253
+[01-Jun-2025 16:50:53 Asia/Bangkok] Limit: 5
+[01-Jun-2025 16:50:53 Asia/Bangkok] Where clause: (user_id IS NULL OR user_id = 0) AND ip_address = '49.237.46.253' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:50:53 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE (user_id IS NULL OR user_id = 0) AND ip_address = '49.237.46.253' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:50:53 Asia/Bangkok] Current count: 0
+[01-Jun-2025 16:50:53 Asia/Bangkok] Save data: Array
+(
+    [user_id] => 
+    [subject] => รถยนต์ติดปีก
+    [content_type] => automotive photography
+    [style] => cinematic
+    [scene] => 
+    [details] => 
+    [generated_prompt] => รถยนต์ติดปีก, automotive photography, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+    [ip_address] => 49.237.46.253
+    [user_agent] => Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36
+)
+
+[01-Jun-2025 16:50:53 Asia/Bangkok] Save result: success
+[01-Jun-2025 16:50:53 Asia/Bangkok] Success message: บันทึก Prompt สำเร็จ - เหลือสิทธิ์ 4 ครั้ง สำหรับวันนี้
+[01-Jun-2025 16:51:47 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:51:47 Asia/Bangkok] Session ID: kf8lieartpan309pc8m57n1954
+[01-Jun-2025 16:51:47 Asia/Bangkok] Session User ID: none
+[01-Jun-2025 16:51:47 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:51:47 Asia/Bangkok] Raw JSON input: {"subject":"รถยนต์ติดเทอร์โบ","content_type":"automotive photography","style":"cinematic","scene":"","details":"","generated_prompt":"รถยนต์ติดเทอร์โบ, automotive photography, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:51:47 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => รถยนต์ติดเทอร์โบ
+    [content_type] => automotive photography
+    [style] => cinematic
+    [scene] => 
+    [details] => 
+    [generated_prompt] => รถยนต์ติดเทอร์โบ, automotive photography, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:51:47 Asia/Bangkok] User ID: null
+[01-Jun-2025 16:51:47 Asia/Bangkok] IP Address: 49.237.46.253
+[01-Jun-2025 16:51:47 Asia/Bangkok] Limit: 5
+[01-Jun-2025 16:51:47 Asia/Bangkok] Where clause: (user_id IS NULL OR user_id = 0) AND ip_address = '49.237.46.253' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:51:47 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE (user_id IS NULL OR user_id = 0) AND ip_address = '49.237.46.253' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:51:47 Asia/Bangkok] Current count: 1
+[01-Jun-2025 16:51:47 Asia/Bangkok] Save data: Array
+(
+    [user_id] => 
+    [subject] => รถยนต์ติดเทอร์โบ
+    [content_type] => automotive photography
+    [style] => cinematic
+    [scene] => 
+    [details] => 
+    [generated_prompt] => รถยนต์ติดเทอร์โบ, automotive photography, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+    [ip_address] => 49.237.46.253
+    [user_agent] => Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36
+)
+
+[01-Jun-2025 16:51:47 Asia/Bangkok] Save result: success
+[01-Jun-2025 16:51:47 Asia/Bangkok] Success message: บันทึก Prompt สำเร็จ - เหลือสิทธิ์ 3 ครั้ง สำหรับวันนี้
+[01-Jun-2025 16:52:55 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:52:55 Asia/Bangkok] Session ID: kf8lieartpan309pc8m57n1954
+[01-Jun-2025 16:52:55 Asia/Bangkok] Session User ID: none
+[01-Jun-2025 16:52:55 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:52:55 Asia/Bangkok] Raw JSON input: {"subject":"เรือบินได้","content_type":"automotive photography","style":"photorealistic","scene":"ทะเล","details":"","generated_prompt":"เรือบินได้, automotive photography, photorealistic style, in ทะเล, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:52:55 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => เรือบินได้
+    [content_type] => automotive photography
+    [style] => photorealistic
+    [scene] => ทะเล
+    [details] => 
+    [generated_prompt] => เรือบินได้, automotive photography, photorealistic style, in ทะเล, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:52:55 Asia/Bangkok] User ID: null
+[01-Jun-2025 16:52:55 Asia/Bangkok] IP Address: 49.237.46.253
+[01-Jun-2025 16:52:55 Asia/Bangkok] Limit: 5
+[01-Jun-2025 16:52:55 Asia/Bangkok] Where clause: (user_id IS NULL OR user_id = 0) AND ip_address = '49.237.46.253' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:52:55 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE (user_id IS NULL OR user_id = 0) AND ip_address = '49.237.46.253' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:52:55 Asia/Bangkok] Current count: 2
+[01-Jun-2025 16:52:55 Asia/Bangkok] Save data: Array
+(
+    [user_id] => 
+    [subject] => เรือบินได้
+    [content_type] => automotive photography
+    [style] => photorealistic
+    [scene] => ทะเล
+    [details] => 
+    [generated_prompt] => เรือบินได้, automotive photography, photorealistic style, in ทะเล, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+    [ip_address] => 49.237.46.253
+    [user_agent] => Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36
+)
+
+[01-Jun-2025 16:52:55 Asia/Bangkok] Save result: success
+[01-Jun-2025 16:52:55 Asia/Bangkok] Success message: บันทึก Prompt สำเร็จ - เหลือสิทธิ์ 2 ครั้ง สำหรับวันนี้
+[01-Jun-2025 16:54:03 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:54:03 Asia/Bangkok] Session ID: kf8lieartpan309pc8m57n1954
+[01-Jun-2025 16:54:03 Asia/Bangkok] Session User ID: none
+[01-Jun-2025 16:54:03 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:54:03 Asia/Bangkok] Raw JSON input: {"subject":"เรือตกปลา บินอยู่เนื้อฝุงปลา","content_type":"","style":"photorealistic","scene":"ทะเล","details":"","generated_prompt":"เรือตกปลา บินอยู่เนื้อฝุงปลา, photorealistic style, in ทะเล, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:54:03 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => เรือตกปลา บินอยู่เนื้อฝุงปลา
+    [content_type] => 
+    [style] => photorealistic
+    [scene] => ทะเล
+    [details] => 
+    [generated_prompt] => เรือตกปลา บินอยู่เนื้อฝุงปลา, photorealistic style, in ทะเล, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:54:03 Asia/Bangkok] User ID: null
+[01-Jun-2025 16:54:03 Asia/Bangkok] IP Address: 49.237.46.253
+[01-Jun-2025 16:54:03 Asia/Bangkok] Limit: 5
+[01-Jun-2025 16:54:03 Asia/Bangkok] Where clause: (user_id IS NULL OR user_id = 0) AND ip_address = '49.237.46.253' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:54:03 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE (user_id IS NULL OR user_id = 0) AND ip_address = '49.237.46.253' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:54:03 Asia/Bangkok] Current count: 3
+[01-Jun-2025 16:54:03 Asia/Bangkok] Save data: Array
+(
+    [user_id] => 
+    [subject] => เรือตกปลา บินอยู่เนื้อฝุงปลา
+    [content_type] => 
+    [style] => photorealistic
+    [scene] => ทะเล
+    [details] => 
+    [generated_prompt] => เรือตกปลา บินอยู่เนื้อฝุงปลา, photorealistic style, in ทะเล, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+    [ip_address] => 49.237.46.253
+    [user_agent] => Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36
+)
+
+[01-Jun-2025 16:54:03 Asia/Bangkok] Save result: success
+[01-Jun-2025 16:54:03 Asia/Bangkok] Success message: บันทึก Prompt สำเร็จ - เหลือสิทธิ์ 1 ครั้ง สำหรับวันนี้
+[01-Jun-2025 16:54:50 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:54:50 Asia/Bangkok] Session ID: kf8lieartpan309pc8m57n1954
+[01-Jun-2025 16:54:50 Asia/Bangkok] Session User ID: none
+[01-Jun-2025 16:54:50 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:54:50 Asia/Bangkok] Raw JSON input: {"subject":"เรือตกปลา logo NOP SKY BLUE","content_type":"","style":"photorealistic","scene":"ทะเล","details":"","generated_prompt":"เรือตกปลา logo NOP SKY BLUE, photorealistic style, in ทะเล, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:54:50 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => เรือตกปลา logo NOP SKY BLUE
+    [content_type] => 
+    [style] => photorealistic
+    [scene] => ทะเล
+    [details] => 
+    [generated_prompt] => เรือตกปลา logo NOP SKY BLUE, photorealistic style, in ทะเล, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:54:50 Asia/Bangkok] User ID: null
+[01-Jun-2025 16:54:50 Asia/Bangkok] IP Address: 49.237.46.253
+[01-Jun-2025 16:54:50 Asia/Bangkok] Limit: 5
+[01-Jun-2025 16:54:50 Asia/Bangkok] Where clause: (user_id IS NULL OR user_id = 0) AND ip_address = '49.237.46.253' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:54:50 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE (user_id IS NULL OR user_id = 0) AND ip_address = '49.237.46.253' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:54:50 Asia/Bangkok] Current count: 4
+[01-Jun-2025 16:54:50 Asia/Bangkok] Save data: Array
+(
+    [user_id] => 
+    [subject] => เรือตกปลา logo NOP SKY BLUE
+    [content_type] => 
+    [style] => photorealistic
+    [scene] => ทะเล
+    [details] => 
+    [generated_prompt] => เรือตกปลา logo NOP SKY BLUE, photorealistic style, in ทะเล, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+    [ip_address] => 49.237.46.253
+    [user_agent] => Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36
+)
+
+[01-Jun-2025 16:54:50 Asia/Bangkok] Save result: success
+[01-Jun-2025 16:54:50 Asia/Bangkok] Success message: บันทึก Prompt สำเร็จ - เหลือสิทธิ์ 0 ครั้ง สำหรับวันนี้
+[01-Jun-2025 16:54:57 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:54:57 Asia/Bangkok] Session ID: kf8lieartpan309pc8m57n1954
+[01-Jun-2025 16:54:57 Asia/Bangkok] Session User ID: none
+[01-Jun-2025 16:54:57 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:54:57 Asia/Bangkok] Raw JSON input: {"subject":"เรือตกปลา logo NOP SKY BLUE","content_type":"","style":"photorealistic","scene":"ทะเล","details":"","generated_prompt":"เรือตกปลา logo NOP SKY BLUE, photorealistic style, in ทะเล, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:54:57 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => เรือตกปลา logo NOP SKY BLUE
+    [content_type] => 
+    [style] => photorealistic
+    [scene] => ทะเล
+    [details] => 
+    [generated_prompt] => เรือตกปลา logo NOP SKY BLUE, photorealistic style, in ทะเล, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:54:57 Asia/Bangkok] User ID: null
+[01-Jun-2025 16:54:57 Asia/Bangkok] IP Address: 49.237.46.253
+[01-Jun-2025 16:54:57 Asia/Bangkok] Limit: 5
+[01-Jun-2025 16:54:57 Asia/Bangkok] Where clause: (user_id IS NULL OR user_id = 0) AND ip_address = '49.237.46.253' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:54:57 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE (user_id IS NULL OR user_id = 0) AND ip_address = '49.237.46.253' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:54:57 Asia/Bangkok] Current count: 5
+[01-Jun-2025 16:54:57 Asia/Bangkok] Limit exceeded. Status: ผู้ใช้ทั่วไป
+[01-Jun-2025 16:57:38 Asia/Bangkok] === Save User Prompt Debug ===
+[01-Jun-2025 16:57:38 Asia/Bangkok] Session ID: 761kjbjn1sd59lc7t9u1locovr
+[01-Jun-2025 16:57:38 Asia/Bangkok] Session User ID: none
+[01-Jun-2025 16:57:38 Asia/Bangkok] Request Method: POST
+[01-Jun-2025 16:57:38 Asia/Bangkok] Raw JSON input: {"subject":"","content_type":"interior design","style":"","scene":"","details":"","generated_prompt":"interior design, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting"}
+[01-Jun-2025 16:57:38 Asia/Bangkok] Parsed data: Array
+(
+    [subject] => 
+    [content_type] => interior design
+    [style] => 
+    [scene] => 
+    [details] => 
+    [generated_prompt] => interior design, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting
+)
+
+[01-Jun-2025 16:57:38 Asia/Bangkok] User ID: null
+[01-Jun-2025 16:57:38 Asia/Bangkok] IP Address: 184.22.182.242
+[01-Jun-2025 16:57:38 Asia/Bangkok] Limit: 5
+[01-Jun-2025 16:57:38 Asia/Bangkok] Where clause: (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:57:38 Asia/Bangkok] Count SQL: SELECT COUNT(*) as count FROM user_prompts WHERE (user_id IS NULL OR user_id = 0) AND ip_address = '184.22.182.242' AND DATE(created_at) = CURDATE()
+[01-Jun-2025 16:57:38 Asia/Bangkok] Current count: 5
+[01-Jun-2025 16:57:38 Asia/Bangkok] Limit exceeded. Status: ผู้ใช้ทั่วไป

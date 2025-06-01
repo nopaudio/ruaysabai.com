@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 01, 2025 at 04:36 AM
+-- Generation Time: Jun 01, 2025 at 02:04 PM
 -- Server version: 10.6.20-MariaDB-cll-lve-log
 -- PHP Version: 8.1.32
 
@@ -189,7 +189,10 @@ CREATE TABLE `gallery_items` (
 INSERT INTO `gallery_items` (`id`, `title`, `description`, `image_url`, `prompt`, `icon`, `created_at`, `updated_at`) VALUES
 (4, 'AI Robot Portrait', 'หุ่นยนต์ AI แบบไซเบอร์พังค์', 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&h=300&fit=crop&crop=center', 'futuristic AI robot, cyberpunk portrait style, glowing blue eyes, metallic chrome finish, in dark tech laboratory, advanced circuitry details, neon blue and purple lighting, mysterious atmosphere, close-up shot, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 'fas fa-robot', '2025-05-31 11:23:17', '2025-05-31 11:23:17'),
 (5, 'Sunset Mountain', 'ภูเขาในแสงพระอาทิตย์ตก', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop&crop=center', 'majestic mountain landscape, dramatic sunset photography style, golden hour lighting, layered mountain silhouettes, vibrant orange and purple sky, misty valleys, serene peaceful atmosphere, wide panoramic shot, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 'fas fa-mountain', '2025-05-31 11:23:17', '2025-05-31 11:23:17'),
-(6, 'Luxury Sports Car', 'รถสปอร์ตหรู ในสตูดิโอ', 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&h=300&fit=crop&crop=center', 'luxury sports car, automotive photography style, sleek metallic paint finish, dramatic studio lighting, reflective black floor, modern showroom background, silver and chrome accents, sophisticated atmosphere, low angle shot, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 'fas fa-car', '2025-05-31 11:23:17', '2025-05-31 11:23:17');
+(6, 'Luxury Sports Car', 'รถสปอร์ตหรู ในสตูดิโอ', 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&h=300&fit=crop&crop=center', 'luxury sports car, automotive photography style, sleek metallic paint finish, dramatic studio lighting, reflective black floor, modern showroom background, silver and chrome accents, sophisticated atmosphere, low angle shot, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 'fas fa-car', '2025-05-31 11:23:17', '2025-05-31 11:23:17'),
+(7, 'ไอแอล 8K', 'ไอแอลเวอร์ชั่น  8K', 'https://ruaysabai.com//uploads/img_683aef88040cc9.45428399.png', 'A stunning close-up of a tattooed Southeast Asian man laughing joyfully, showcasing his vibrant tattoos and expressive face. He is wearing a white tank top. The background is a {สถานที่} with dramatic lighting, warm sunset hues, and a cinematic atmosphere. The image is ultra-detailed, hyper-realistic, sharp focus, 4K resolution, with vibrant colors and a dynamic composition', 'fas fa-image', '2025-06-01 05:19:43', '2025-06-01 05:40:33'),
+(8, 'ไอแอล 8K2', 'ไอแอลเวอร์ชั่น  8K2', 'https://ruaysabai.com//uploads/img_683aef88040cc9.45428399.png', '222', 'fas fa-image', '2025-06-01 05:52:12', '2025-06-01 05:52:12'),
+(9, 'ไอแอล 8K3', 'ไอแอลเวอร์ชั่น  8K3', 'https://ruaysabai.com//uploads/img_683aef88040cc9.45428399.png', '33', 'fas fa-image', '2025-06-01 05:52:22', '2025-06-01 05:52:22');
 
 -- --------------------------------------------------------
 
@@ -308,7 +311,7 @@ CREATE TABLE `site_settings` (
 --
 
 INSERT INTO `site_settings` (`id`, `setting_key`, `setting_value`, `setting_type`, `description`, `updated_by`, `created_at`, `updated_at`) VALUES
-(12, 'site_title', 'PromptEase AI Prompt 11', 'text', NULL, NULL, '2025-05-31 11:23:17', '2025-06-01 03:28:00'),
+(12, 'site_title', 'PromptEase AI Promptcxc', 'text', NULL, NULL, '2025-05-31 11:23:17', '2025-06-01 05:40:13'),
 (13, 'site_description', 'สร้าง Prompt สำหรับภาพคมชัด สมจริง ด้วยปัญญาประดิษฐ์ขั้นสูง', 'text', NULL, NULL, '2025-05-31 11:23:17', '2025-05-31 11:29:26'),
 (14, 'online_count', '182', 'text', NULL, NULL, '2025-05-31 11:23:17', '2025-05-31 11:23:17'),
 (15, 'placeholder_title', 'เริ่มสร้าง Prompt ของคุณ', 'text', NULL, NULL, '2025-05-31 11:23:17', '2025-05-31 11:23:17'),
@@ -379,7 +382,8 @@ INSERT INTO `users` (`id`, `username`, `email`, `password_hash`, `full_name`, `a
 (5, 'testfree', 'testfree@example.com', '$2y$10$Dcm2ZZFrohiMG0h6qLo5tu/AUUN3rR41Dnpz5DgXnxKfA7T0/UZfa', '????? ?????????', NULL, 'free', 10, 10, NULL, 0, NULL, NULL, NULL, '2025-06-01 11:11:48', '2025-06-01 03:55:24', '2025-06-01 04:11:48', 'active', 'free', NULL),
 (6, 'testmonthly', 'testmonthly@example.com', '$2y$10$sqL4zkdkV8FNrNR7HH/FO.cc2zqTE76ss74IXif887nnjyPpueL.6', '????? ??????????????', NULL, 'premium', 60, 60, NULL, 0, NULL, NULL, NULL, NULL, '2025-06-01 03:55:24', '2025-06-01 03:55:24', 'active', 'monthly', '2025-07-01'),
 (7, 'testyearly', 'testyearly@example.com', '$2y$10$G9zor1FDmgMlW4qzH6itxOtdJCaEUrZEIJesljtO0Fi/4KBLeTx/q', '????? ???????????', NULL, 'premium', 999999, 999999, NULL, 0, NULL, NULL, NULL, NULL, '2025-06-01 03:55:24', '2025-06-01 03:55:24', 'active', 'yearly', '2026-06-01'),
-(8, 'nopaudio4', 'newnop9994@gmail.com', '$2y$10$HiUD2GQDf4QEmL3NfCnQ8uEazhYrLdHJnUAb84G50e78osKKDQ49O', 'nopaudio4', NULL, 'free', 10, 10, NULL, 0, NULL, NULL, NULL, '2025-06-01 11:34:10', '2025-06-01 04:33:53', '2025-06-01 04:34:10', 'active', 'free', NULL);
+(8, 'nopaudio4', 'newnop9994@gmail.com', '$2y$10$HiUD2GQDf4QEmL3NfCnQ8uEazhYrLdHJnUAb84G50e78osKKDQ49O', 'nopaudio4', NULL, 'free', 10, 10, NULL, 0, NULL, NULL, NULL, '2025-06-01 17:43:29', '2025-06-01 04:33:53', '2025-06-01 10:43:29', 'active', 'free', NULL),
+(9, 'nopaudio5', 'newnop99954@gmail.com', '$2y$10$L2v577UnEDR.R7VcbAOj0ul4hUPHH.c1OKkNRoo4M1Yo5Xg4tbE8K', 'nopaudio5', NULL, 'free', 10, 10, NULL, 0, NULL, NULL, NULL, '2025-06-01 20:20:15', '2025-06-01 13:19:22', '2025-06-01 13:20:15', 'active', 'free', NULL);
 
 -- --------------------------------------------------------
 
@@ -391,6 +395,7 @@ CREATE TABLE `user_prompts` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
   `subject` varchar(500) DEFAULT NULL,
   `content_type` varchar(100) DEFAULT NULL,
   `style` varchar(100) DEFAULT NULL,
@@ -401,6 +406,33 @@ CREATE TABLE `user_prompts` (
   `is_shared` tinyint(1) DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_prompts`
+--
+
+INSERT INTO `user_prompts` (`id`, `user_id`, `ip_address`, `user_agent`, `subject`, `content_type`, `style`, `scene`, `details`, `generated_prompt`, `is_favorite`, `is_shared`, `created_at`) VALUES
+(1, 0, '184.22.182.242', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', 'เรือตกปลา ไฮเทค', 'interior design', 'vintage', '', '', 'เรือตกปลา ไฮเทค, interior design, vintage style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 08:40:35'),
+(2, 0, '184.22.182.242', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', 'เรือตกปลา ไฮเทค', 'portrait photography', 'anime style', '', '', 'เรือตกปลา ไฮเทค, portrait photography, anime style style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 08:40:49'),
+(3, 0, '184.22.182.242', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '', 'abstract art', 'cyberpunk', '', '', 'abstract art, cyberpunk style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 08:40:58'),
+(4, 0, '184.22.182.242', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '111', 'abstract art', 'cyberpunk', '', '', '111, abstract art, cyberpunk style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 08:41:47'),
+(5, 0, '184.22.182.242', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '111', 'interior design', 'cyberpunk', '', '', '111, interior design, cyberpunk style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 08:41:52'),
+(6, 8, '184.22.182.242', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', 'ปลานีโม่', 'landscape photography', '', '', '', 'ปลานีโม่, landscape photography, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 09:21:46'),
+(7, 8, '184.22.182.242', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', 'ปลานีโม่', 'abstract art', '', '', '', 'ปลานีโม่, abstract art, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 09:21:51'),
+(8, 8, '184.22.182.242', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', 'ปลานีโม่', 'abstract art', 'minimalist', '', '', 'ปลานีโม่, abstract art, minimalist style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 09:21:55'),
+(9, 8, '184.22.182.242', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', 'ปลานีโม่', 'portrait photography', 'minimalist', '', '', 'ปลานีโม่, portrait photography, minimalist style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 09:22:01'),
+(10, 8, '184.22.182.242', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', 'ปลานีโม่', 'portrait photography', 'photorealistic', '', '', 'ปลานีโม่, portrait photography, photorealistic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 09:22:04'),
+(11, 8, '184.22.182.242', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', 'ปลานีโม่', '', 'photorealistic', '', '', 'ปลานีโม่, photorealistic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 09:22:08'),
+(12, 8, '184.22.182.242', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', 'ปลานีโม่', '', 'cyberpunk', '', '', 'ปลานีโม่, cyberpunk style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 09:22:10'),
+(13, 8, '184.22.182.242', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', 'ปลานีโม่', '', 'cinematic', '', '', 'ปลานีโม่, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 09:22:13'),
+(14, 8, '184.22.182.242', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', 'ปลานีโม่', 'abstract art', 'cinematic', '', '', 'ปลานีโม่, abstract art, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 09:22:15'),
+(15, 8, '184.22.182.242', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', 'ปลานีโม่', 'automotive photography', 'cyberpunk', '', '', 'ปลานีโม่, automotive photography, cyberpunk style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 09:22:20'),
+(16, 0, '49.237.46.253', 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', 'รถยนต์ติดปีก', 'automotive photography', 'cinematic', '', '', 'รถยนต์ติดปีก, automotive photography, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 09:50:53'),
+(17, 0, '49.237.46.253', 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', 'รถยนต์ติดเทอร์โบ', 'automotive photography', 'cinematic', '', '', 'รถยนต์ติดเทอร์โบ, automotive photography, cinematic style, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 09:51:47'),
+(18, 0, '49.237.46.253', 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', 'เรือบินได้', 'automotive photography', 'photorealistic', 'ทะเล', '', 'เรือบินได้, automotive photography, photorealistic style, in ทะเล, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 09:52:55'),
+(19, 0, '49.237.46.253', 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', 'เรือตกปลา บินอยู่เนื้อฝุงปลา', '', 'photorealistic', 'ทะเล', '', 'เรือตกปลา บินอยู่เนื้อฝุงปลา, photorealistic style, in ทะเล, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 09:54:03'),
+(20, 0, '49.237.46.253', 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36', 'เรือตกปลา logo NOP SKY BLUE', '', 'photorealistic', 'ทะเล', '', 'เรือตกปลา logo NOP SKY BLUE, photorealistic style, in ทะเล, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 09:54:50'),
+(21, 9, '49.237.46.253', NULL, 'ทะเล', 'landscape photography', '', '', '', 'ทะเล, landscape photography, masterpiece, ultra-detailed, photorealistic, high resolution, sharp focus, professional photography, cinematic lighting', 0, 0, '2025-06-01 13:21:37');
 
 --
 -- Indexes for dumped tables
@@ -548,7 +580,7 @@ ALTER TABLE `gallery`
 -- AUTO_INCREMENT for table `gallery_items`
 --
 ALTER TABLE `gallery_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `notifications`
@@ -584,13 +616,13 @@ ALTER TABLE `subscriptions`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `user_prompts`
 --
 ALTER TABLE `user_prompts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

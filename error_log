@@ -4,3 +4,8 @@
 [01-Jun-2025 01:25:41 Asia/Bangkok] Error saving user prompt: Unknown column 'ip_address' in 'INSERT INTO'
 [01-Jun-2025 01:25:43 Asia/Bangkok] Error saving user prompt: Unknown column 'ip_address' in 'INSERT INTO'
 [01-Jun-2025 01:25:45 Asia/Bangkok] Error saving user prompt: Unknown column 'ip_address' in 'INSERT INTO'
+[01-Jun-2025 15:17:37 Asia/Bangkok] Error saving user prompt: Unknown column 'user_agent' in 'INSERT INTO'
+[01-Jun-2025 15:20:05 Asia/Bangkok] Error saving user prompt: Unknown column 'user_agent' in 'INSERT INTO'
+[01-Jun-2025 15:27:21 Asia/Bangkok] Error saving user prompt: Unknown column 'user_agent' in 'INSERT INTO'
+[01-Jun-2025 15:27:28 Asia/Bangkok] Error saving user prompt: Unknown column 'user_agent' in 'INSERT INTO'
+[01-Jun-2025 15:27:34 Asia/Bangkok] Error saving user prompt: Unknown column 'user_agent' in 'INSERT INTO'
