@@ -1,0 +1,24 @@
+# .htaccess - วางไฟล์นี้ในโฟลเดอร์เดียวกับ index.php
+
+# บังคับใช้ UTF-8 Encoding
+AddDefaultCharset UTF-8
+AddCharset UTF-8 .php .html .htm .js .css
+
+# กำหนด Content-Type สำหรับไฟล์ PHP
+<FilesMatch "\.(php)$">
+    ForceType 'text/html; charset=UTF-8'
+</FilesMatch>
+
+# Header สำหรับ UTF-8
+Header always set Content-Type "text/html; charset=UTF-8"
+
+# เปิดใช้งาน mod_rewrite
+RewriteEngine On
+
+# แก้ไขปัญหา encoding สำหรับ URL
+RewriteRule ^(.*)$ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# กำหนดค่า PHP สำหรับ UTF-8
+php_value default_charset "UTF-8"
+php_value mbstring.internal_encoding "UTF-8"
+php_value mbstring.http_output "UTF-8"

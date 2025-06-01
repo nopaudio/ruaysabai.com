@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>สมัครสมาชิก</title>
+</head>
+<body>
+  <h2>สมัครสมาชิก</h2>
+  <form id="registerForm">
+    <label>Username:</label>
+    <input type="text" name="username" required><br>
+    <label>Full Name:</label>
+    <input type="text" name="full_name" required><br>
+    <label>Email:</label>
+    <input type="email" name="email" required><br>
+    <label>Password:</label>
+    <input type="password" name="password" required><br>
+    <button type="submit">สมัครสมาชิก</button>
+  </form>
+  <div id="result"></div>
+  <script>
+    document.getElementById('registerForm').onsubmit = async function(e) {
+      e.preventDefault();
+      let form = e.target;
+      let data = {
+        username: form.username.value,
+        full_name: form.full_name.value,
+        email: form.email.value,
+        password: form.password.value
+      };
+      let res = await fetch('register.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+      let result = await res.json();
+      document.getElementById('result').innerText = result.message;
+      if(result.success){
+        location.href = 'login.html';
+      }
+    }
+  </script>
+</body>
+</html>
