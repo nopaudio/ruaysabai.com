@@ -1,12 +1,11 @@
 <?php
 require_once 'config.php';
 
-// ตรวจสอบการเข้าสู่ระบบ admin
-session_start();
+// session_start(); // ถูกเรียกใน config.php แล้ว ไม่ต้องเรียกซ้ำ
 
-// ถ้ายังไม่ได้ login และไม่ใช่การ submit login form
-if (!isAdmin() && !isset($_POST['admin_password'])) {
-    // แสดงฟอร์ม login
+// ส่วน Login Admin
+if ((!isset($_SESSION['admin_legacy_logged_in']) || $_SESSION['admin_legacy_logged_in'] !== true) && !isset($_POST['admin_password'])) {
+    // ... (โค้ด HTML สำหรับฟอร์ม Login ทั้งหมด - เหมือนกับที่คุณให้มาล่าสุด) ...
     ?>
     <!DOCTYPE html>
     <html lang="th">
@@ -16,103 +15,21 @@ if (!isAdmin() && !isset($_POST['admin_password'])) {
         <title>Admin Login - AI Prompt Generator Pro</title>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
         <style>
+            /* --- CSS เดิมสำหรับหน้า Login Admin --- */
             @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
-            
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-            
-            body {
-                font-family: 'Poppins', sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                min-height: 100vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            
-            .login-container {
-                background: rgba(255, 255, 255, 0.98);
-                padding: 40px;
-                border-radius: 20px;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-                width: 100%;
-                max-width: 400px;
-                text-align: center;
-            }
-            
-            .login-header {
-                margin-bottom: 30px;
-            }
-            
-            .login-header i {
-                font-size: 3em;
-                color: #667eea;
-                margin-bottom: 20px;
-            }
-            
-            .login-header h1 {
-                color: #333;
-                font-size: 1.8em;
-                margin-bottom: 10px;
-            }
-            
-            .form-group {
-                margin-bottom: 20px;
-                text-align: left;
-            }
-            
-            .form-group label {
-                display: block;
-                margin-bottom: 8px;
-                color: #555;
-                font-weight: 600;
-            }
-            
-            .form-group input {
-                width: 100%;
-                padding: 12px 15px;
-                border: 2px solid #e1e5e9;
-                border-radius: 10px;
-                font-size: 16px;
-                transition: all 0.3s ease;
-            }
-            
-            .form-group input:focus {
-                outline: none;
-                border-color: #667eea;
-                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-            }
-            
-            .login-btn {
-                background: linear-gradient(135deg, #667eea, #764ba2);
-                color: white;
-                border: none;
-                padding: 15px 30px;
-                border-radius: 10px;
-                font-size: 16px;
-                font-weight: 600;
-                cursor: pointer;
-                width: 100%;
-                transition: all 0.3s ease;
-            }
-            
-            .login-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-            }
-            
-            .error-message {
-                background: rgba(255, 107, 107, 0.1);
-                border: 1px solid rgba(255, 107, 107, 0.3);
-                color: #ff6b6b;
-                padding: 10px;
-                border-radius: 8px;
-                margin-bottom: 20px;
-                display: none;
-            }
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+            .login-container { background: rgba(255, 255, 255, 0.98); padding: 40px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); width: 100%; max-width: 400px; text-align: center; }
+            .login-header { margin-bottom: 30px; }
+            .login-header i { font-size: 3em; color: #667eea; margin-bottom: 20px; }
+            .login-header h1 { color: #333; font-size: 1.8em; margin-bottom: 10px; }
+            .form-group { margin-bottom: 20px; text-align: left; }
+            .form-group label { display: block; margin-bottom: 8px; color: #555; font-weight: 600; }
+            .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e1e5e9; border-radius: 10px; font-size: 16px; transition: all 0.3s ease; }
+            .form-group input:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+            .login-btn { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; transition: all 0.3s ease; }
+            .login-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3); }
+            .error-message { background: rgba(255, 107, 107, 0.1); border: 1px solid rgba(255, 107, 107, 0.3); color: #ff6b6b; padding: 10px; border-radius: 8px; margin-bottom: 20px; display: none; }
         </style>
     </head>
     <body>
@@ -122,30 +39,21 @@ if (!isAdmin() && !isset($_POST['admin_password'])) {
                 <h1>Admin Login</h1>
                 <p style="color: #666;">กรุณาเข้าสู่ระบบเพื่อจัดการเว็บไซต์</p>
             </div>
-            
             <div class="error-message" id="error-message">
                 <i class="fas fa-exclamation-circle"></i> รหัสผ่านไม่ถูกต้อง
             </div>
-            
             <form method="POST" action="admin.php">
                 <div class="form-group">
                     <label for="admin_password">รหัสผ่าน Admin</label>
                     <input type="password" id="admin_password" name="admin_password" required autofocus>
                 </div>
-                
                 <button type="submit" name="admin_login" class="login-btn">
                     <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
                 </button>
             </form>
         </div>
-        
         <?php if (isset($_GET['error'])): ?>
-        <script>
-            document.getElementById('error-message').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('error-message').style.display = 'none';
-            }, 3000);
-        </script>
+        <script> document.getElementById('error-message').style.display = 'block'; setTimeout(() => { document.getElementById('error-message').style.display = 'none'; }, 3000); </script>
         <?php endif; ?>
     </body>
     </html>
@@ -153,9 +61,9 @@ if (!isAdmin() && !isset($_POST['admin_password'])) {
     exit;
 }
 
-// ตรวจสอบการ login
 if (isset($_POST['admin_login']) && isset($_POST['admin_password'])) {
-    if (adminLogin($_POST['admin_password'])) {
+    if (adminLogin($_POST['admin_password'])) { // adminLogin จาก config.php จะตั้ง session
+        // ไม่จำเป็นต้องตั้ง $_SESSION['admin_legacy_logged_in'] = true; ที่นี่อีก เพราะ adminLogin ทำแล้ว
         header('Location: admin.php');
         exit;
     } else {
@@ -164,833 +72,288 @@ if (isset($_POST['admin_login']) && isset($_POST['admin_password'])) {
     }
 }
 
-// ตรวจสอบว่า login แล้วหรือยัง
-if (!isAdmin()) {
+if (!isset($_SESSION['admin_legacy_logged_in']) || $_SESSION['admin_legacy_logged_in'] !== true) {
     header('Location: admin.php');
     exit;
 }
 
-// จัดการ AJAX requests
+// --- START: AJAX Handler ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     header('Content-Type: application/json; charset=utf-8');
     
     $promptManager = new PromptManager();
-    $db = Database::getInstance();
+    // $db = Database::getInstance(); // $promptManager->db สามารถใช้ได้
     $action = $_POST['action'];
     
+    // $adminUser = getCurrentUser(); // ถ้าจะใช้ระบบ login user ปกติสำหรับ admin
+    // $adminId = $adminUser && $adminUser['user_type'] === 'admin' ? $adminUser['id'] : 1; // หรือ ID ของ Admin หลัก
+    // สำหรับระบบ legacy admin password, เราอาจจะยังไม่มี $adminId ที่มาจาก user DB จริงๆ
+    // อาจจะต้องกำหนดค่า default หรือหาวิธีอื่นถ้า action นั้นๆ ต้องการ admin ID
+    $loggedInAdminId = 1; // สมมติ ID Admin หลักคือ 1 สำหรับ action ที่ต้องการ approved_by
+
     try {
         switch ($action) {
             case 'save_example':
                 $title = cleanInput($_POST['title']);
-                $prompt = cleanInput($_POST['prompt']);
+                $prompt_text = cleanInput($_POST['prompt']);
                 $icon = cleanInput($_POST['icon']) ?: 'fas fa-image';
                 $id = isset($_POST['id']) ? intval($_POST['id']) : null;
-                
-                if ($id) {
-                    $result = $db->update('prompt_examples', [
-                        'title' => $title,
-                        'prompt' => $prompt,
-                        'icon' => $icon
-                    ], "id = $id");
-                } else {
-                    $result = $db->insert('prompt_examples', [
-                        'title' => $title,
-                        'prompt' => $prompt,
-                        'icon' => $icon
-                    ]);
-                }
-                
-                jsonResponse($result, $result ? 'บันทึกข้อมูลเรียบร้อยแล้ว' : 'เกิดข้อผิดพลาด');
+                $data = ['title' => $title, 'prompt' => $prompt_text, 'icon' => $icon];
+                if ($id) { $result = $promptManager->db->update('prompt_examples', $data, "id = ?", [$id]); } 
+                else { $result = $promptManager->db->insert('prompt_examples', $data); }
+                jsonResponse($result !== false, $result !== false ? 'บันทึก Example สำเร็จ' : 'พลาดในการบันทึก Example');
                 break;
-                
             case 'delete_example':
                 $id = intval($_POST['id']);
-                $result = $db->delete('prompt_examples', "id = $id");
-                jsonResponse($result, $result ? 'ลบข้อมูลเรียบร้อยแล้ว' : 'เกิดข้อผิดพลาด');
+                $result = $promptManager->db->delete('prompt_examples', "id = ?", [$id]);
+                jsonResponse($result !== false, $result !== false ? 'ลบ Example สำเร็จ' : 'พลาดในการลบ Example');
                 break;
-                
             case 'save_gallery':
-                $title = cleanInput($_POST['title']);
-                $description = cleanInput($_POST['description']);
-                $image_url = cleanInput($_POST['image_url']);
-                $prompt = cleanInput($_POST['prompt']);
-                $icon = cleanInput($_POST['icon']) ?: 'fas fa-image';
                 $id = isset($_POST['id']) ? intval($_POST['id']) : null;
-                
-                if ($id) {
-                    $result = $db->update('gallery_items', [
-                        'title' => $title,
-                        'description' => $description,
-                        'image_url' => $image_url,
-                        'prompt' => $prompt,
-                        'icon' => $icon
-                    ], "id = $id");
-                } else {
-                    $result = $db->insert('gallery_items', [
-                        'title' => $title,
-                        'description' => $description,
-                        'image_url' => $image_url,
-                        'prompt' => $prompt,
-                        'icon' => $icon
-                    ]);
-                }
-                
-                jsonResponse($result, $result ? 'บันทึกข้อมูลเรียบร้อยแล้ว' : 'เกิดข้อผิดพลาด');
+                $data = [
+                    'title' => cleanInput($_POST['title']), 'description' => cleanInput($_POST['description']),
+                    'image_url' => cleanInput($_POST['image_url']), 'prompt' => cleanInput($_POST['prompt']),
+                    'icon' => cleanInput($_POST['icon']) ?: 'fas fa-image'
+                ];
+                if ($id) { $result = $promptManager->db->update('gallery_items', $data, "id = ?", [$id]); } 
+                else { $result = $promptManager->db->insert('gallery_items', $data); }
+                jsonResponse($result !== false, $result !== false ? 'บันทึก Gallery สำเร็จ' : 'พลาดในการบันทึก Gallery');
                 break;
-                
             case 'delete_gallery':
                 $id = intval($_POST['id']);
-                $result = $db->delete('gallery_items', "id = $id");
-                jsonResponse($result, $result ? 'ลบข้อมูลเรียบร้อยแล้ว' : 'เกิดข้อผิดพลาด');
+                $result = $promptManager->db->delete('gallery_items', "id = ?", [$id]);
+                jsonResponse($result !== false, $result !== false ? 'ลบ Gallery สำเร็จ' : 'พลาดในการลบ Gallery');
                 break;
-                
-            // *** User Management Actions ***
             case 'get_users':
                 $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
-                $limit = 10;
-                $offset = ($page - 1) * $limit;
-                
+                $limit = 10; $offset = ($page - 1) * $limit;
                 $search = isset($_POST['search']) ? cleanInput($_POST['search']) : '';
                 $filter = isset($_POST['filter']) ? cleanInput($_POST['filter']) : '';
-                
-                $where = "1=1";
-                $params = [];
-                
-                if ($search) {
-                    $where .= " AND (username LIKE ? OR email LIKE ? OR full_name LIKE ?)";
-                    $searchTerm = "%$search%";
-                    $params = array_merge($params, [$searchTerm, $searchTerm, $searchTerm]);
-                }
-                
-                if ($filter && $filter !== 'all') {
-                    $where .= " AND member_type = ?";
-                    $params[] = $filter;
-                }
-                
-                // นับจำนวนทั้งหมด
-                $totalResult = $db->select("SELECT COUNT(*) as count FROM users WHERE $where", $params);
-                $total = $totalResult[0]['count'];
-                
-                // ดึงข้อมูลผู้ใช้
-                $users = $db->select("SELECT * FROM users WHERE $where ORDER BY created_at DESC LIMIT $limit OFFSET $offset", $params);
-                
-                jsonResponse(true, 'ดึงข้อมูลสำเร็จ', [
-                    'users' => $users,
-                    'total' => $total,
-                    'page' => $page,
-                    'pages' => ceil($total / $limit)
-                ]);
+                $where_parts = []; $params = [];
+                if ($search) { $where_parts[] = "(username LIKE ? OR email LIKE ? OR full_name LIKE ?)"; $searchTerm = "%{$search}%"; array_push($params, $searchTerm, $searchTerm, $searchTerm); }
+                if ($filter && $filter !== 'all') { $where_parts[] = "member_type = ?"; $params[] = $filter; }
+                $where_clause = count($where_parts) > 0 ? implode(' AND ', $where_parts) : "1=1";
+                $totalResult = $promptManager->db->select("SELECT COUNT(*) as count FROM users WHERE {$where_clause}", $params);
+                $total = $totalResult[0]['count'] ?? 0;
+                $users = $promptManager->db->select("SELECT id, username, email, full_name, avatar_url, member_type, expire_date, points_balance, created_at, status FROM users WHERE {$where_clause} ORDER BY created_at DESC LIMIT ? OFFSET ?", array_merge($params, [$limit, $offset]));
+                jsonResponse(true, 'ดึงข้อมูลผู้ใช้สำเร็จ', ['users' => $users, 'total' => $total, 'page' => $page, 'pages' => ceil($total / $limit)]);
                 break;
-                
             case 'get_user':
                 $user_id = intval($_POST['user_id']);
-                $user = $db->select("SELECT * FROM users WHERE id = ?", [$user_id]);
-                if ($user) {
-                    jsonResponse(true, 'ดึงข้อมูลสำเร็จ', $user[0]);
-                } else {
-                    jsonResponse(false, 'ไม่พบข้อมูลผู้ใช้');
-                }
+                $user = $promptManager->db->select("SELECT id, username, email, full_name, member_type, expire_date, points_balance, status FROM users WHERE id = ?", [$user_id]);
+                jsonResponse(!empty($user), !empty($user) ? 'ดึงข้อมูลผู้ใช้สำเร็จ' : 'ไม่พบผู้ใช้', $user[0] ?? null);
                 break;
-                
             case 'update_user_membership':
                 $user_id = intval($_POST['user_id']);
                 $member_type = cleanInput($_POST['member_type']);
-                $expire_date = cleanInput($_POST['expire_date']) ?: null;
-                
-                $updateData = [
-                    'member_type' => $member_type,
-                    'expire_date' => $expire_date,
-                    'updated_at' => date('Y-m-d H:i:s')
-                ];
-                
-                // ปรับ credits และ daily_limit ตาม member_type
-                if ($member_type === 'monthly') {
-                    $updateData['credits'] = 60;
-                    $updateData['daily_limit'] = 60;
-                    $updateData['user_type'] = 'premium';
-                } elseif ($member_type === 'yearly') {
-                    $updateData['credits'] = 999999;
-                    $updateData['daily_limit'] = 999999;
-                    $updateData['user_type'] = 'premium';
-                } else {
-                    $updateData['credits'] = 10;
-                    $updateData['daily_limit'] = 10;
-                    $updateData['user_type'] = 'free';
-                }
-                
-                $result = $db->update('users', $updateData, "id = $user_id");
-                jsonResponse($result, $result ? 'อัปเดตสมาชิกสำเร็จ' : 'เกิดข้อผิดพลาด');
+                $expire_date = !empty($_POST['expire_date']) ? cleanInput($_POST['expire_date']) : null;
+                $points_balance = filter_input(INPUT_POST, 'points_balance', FILTER_VALIDATE_INT);
+                $updateData = ['member_type' => $member_type, 'expire_date' => $expire_date, 'updated_at' => date('Y-m-d H:i:s')];
+                if ($points_balance !== false && $points_balance !== null) { $updateData['points_balance'] = $points_balance; }
+                if ($member_type === 'monthly') { $updateData['credits'] = 60; $updateData['daily_limit'] = 60; $updateData['user_type'] = 'premium'; }
+                elseif ($member_type === 'yearly') { $updateData['credits'] = 999999; $updateData['daily_limit'] = 999999; $updateData['user_type'] = 'premium'; }
+                else { $updateData['credits'] = 10; $updateData['daily_limit'] = 10; $updateData['user_type'] = 'free'; }
+                $result = $promptManager->db->update('users', $updateData, "id = ?", [$user_id]);
+                jsonResponse($result !== false, $result !== false ? 'อัปเดตสมาชิกสำเร็จ' : 'พลาดในการอัปเดตสมาชิก');
                 break;
-                
             case 'delete_user':
                 $user_id = intval($_POST['user_id']);
-                $result = $db->update('users', [
-                    'status' => 'deleted',
-                    'updated_at' => date('Y-m-d H:i:s')
-                ], "id = $user_id");
-                jsonResponse($result, $result ? 'ลบผู้ใช้สำเร็จ' : 'เกิดข้อผิดพลาด');
+                if ($user_id === 1) { jsonResponse(false, 'ไม่สามารถลบบัญชี Admin หลักได้'); break; }
+                $result = $promptManager->db->update('users', ['status' => 'deleted', 'updated_at' => date('Y-m-d H:i:s')], "id = ?", [$user_id]);
+                jsonResponse($result !== false, $result !== false ? 'ลบผู้ใช้สำเร็จ (สถานะ deleted)' : 'พลาดในการลบผู้ใช้');
                 break;
-                
-            case 'save_settings':
-                $success = true;
-                foreach ($_POST['settings'] as $key => $value) {
-                    if (!$promptManager->setSetting($key, cleanInput($value))) {
-                        $success = false;
-                        break;
+            case 'get_pending_sellable_prompts':
+                $page = isset($_POST['page']) ? intval($_POST['page']) : 1; $limit = 10; $offset = ($page - 1) * $limit;
+                $status_filter = isset($_POST['status_filter']) ? cleanInput($_POST['status_filter']) : 'pending_approval';
+                $where_clause_sp = "1=1"; $params_filter_sp = [];
+                if ($status_filter !== 'all') { $where_clause_sp .= " AND sp.status = ?"; $params_filter_sp[] = $status_filter; }
+                $totalResult_sp = $promptManager->db->select("SELECT COUNT(*) as count FROM sellable_prompts sp WHERE " . $where_clause_sp, $params_filter_sp);
+                $total_sp = $totalResult_sp[0]['count'] ?? 0;
+                $final_params_sp = array_merge($params_filter_sp, [$limit, $offset]);
+                $prompts = $promptManager->db->select("SELECT sp.*, u.username as seller_username FROM sellable_prompts sp JOIN users u ON sp.user_id = u.id WHERE " . $where_clause_sp . " ORDER BY sp.created_at ASC LIMIT ? OFFSET ?", $final_params_sp);
+                jsonResponse(true, 'ดึงข้อมูล Prompt สำเร็จ', ['prompts' => $prompts, 'total' => $total_sp, 'page' => $page, 'pages' => ceil($total_sp / $limit)]);
+                break;
+            case 'approve_sellable_prompt':
+                $prompt_id = intval($_POST['prompt_id']);
+                $updateData = ['status' => 'approved', 'approved_by' => $loggedInAdminId, 'approved_at' => date('Y-m-d H:i:s')];
+                $result = $promptManager->db->update('sellable_prompts', $updateData, "id = ?", [$prompt_id]);
+                jsonResponse($result !== false, $result !== false ? 'อนุมัติ Prompt สำเร็จ' : 'พลาดในการอนุมัติ Prompt');
+                break;
+            case 'reject_sellable_prompt':
+                $prompt_id = intval($_POST['prompt_id']);
+                $new_status = isset($_POST['new_status']) && in_array($_POST['new_status'], ['rejected', 'pending_approval']) ? $_POST['new_status'] : 'rejected';
+                $updateData = ['status' => $new_status, 'approved_by' => $loggedInAdminId, 'approved_at' => date('Y-m-d H:i:s')];
+                $result = $promptManager->db->update('sellable_prompts', $updateData, "id = ?", [$prompt_id]);
+                $message = $new_status === 'rejected' ? 'ปฏิเสธ Prompt สำเร็จ' : 'เปลี่ยนสถานะ Prompt สำเร็จ';
+                jsonResponse($result !== false, $result !== false ? $message : 'พลาดในการเปลี่ยนสถานะ');
+                break;
+            case 'update_marketplace_settings':
+                $all_ok_mp = true; 
+                $allowed_keys_mp = ['commission_rate', 'default_prompt_price'];
+                if (isset($_POST['settings']) && is_array($_POST['settings'])) {
+                    foreach ($_POST['settings'] as $key => $value) {
+                        if (in_array($key, $allowed_keys_mp)) { 
+                            $result_mp_set = $promptManager->setSetting($key, cleanInput($value));
+                            if ($result_mp_set === false) { // ตรวจสอบ === false โดยตรง
+                                $all_ok_mp = false; 
+                                error_log("Admin Action: Failed to set marketplace setting for key: " . $key . " | Value: " . $value);
+                                break; 
+                            }
+                        }
                     }
+                } else {
+                    $all_ok_mp = false; // ไม่มี settings ส่งมา
+                     error_log("Admin Action: No settings array provided for update_marketplace_settings.");
                 }
-                jsonResponse($success, $success ? 'บันทึกการตั้งค่าเรียบร้อยแล้ว' : 'เกิดข้อผิดพลาดในการบันทึก');
+                jsonResponse($all_ok_mp, $all_ok_mp ? 'บันทึกตั้งค่า Marketplace สำเร็จ' : 'พลาดในการบันทึกตั้งค่า Marketplace');
                 break;
-                
+            case 'save_settings': // สำหรับตั้งค่าทั่วไปและข้อความเว็บ
+                $all_ok_gen = true; 
+                $allowed_general_keys = ['site_title', 'site_description', 'online_count', 'placeholder_title', 'placeholder_description', 'gallery_title', 'gallery_description'];
+                if (isset($_POST['settings']) && is_array($_POST['settings'])) {
+                    foreach ($_POST['settings'] as $key => $value) {
+                        if (in_array($key, $allowed_general_keys)) { 
+                            $result_gen_set = $promptManager->setSetting($key, cleanInput($value));
+                            if ($result_gen_set === false) { // ตรวจสอบ === false โดยตรง
+                                $all_ok_gen = false; 
+                                error_log("Admin Action: Failed to set general setting for key: " . $key . " | Value: " . $value);
+                                break; 
+                            }
+                        }
+                    }
+                } else {
+                     $all_ok_gen = false; // ไม่มี settings ส่งมา
+                     error_log("Admin Action: No settings array provided for save_settings.");
+                }
+                jsonResponse($all_ok_gen, $all_ok_gen ? 'บันทึกตั้งค่าทั่วไปสำเร็จ' : 'พลาดในการบันทึกตั้งค่าทั่วไป');
+                break;
             case 'get_data':
-                $examples = $promptManager->getAllExamples();
-                $gallery = $promptManager->getAllGalleryItems();
-                $stats = $promptManager->getStats();
-                
-                jsonResponse(true, 'ดึงข้อมูลสำเร็จ', [
-                    'examples' => $examples,
-                    'gallery' => $gallery,
-                    'stats' => $stats,
-                    'settings' => [
-                        'site_title' => $promptManager->getSetting('site_title'),
-                        'site_description' => $promptManager->getSetting('site_description'),
-                        'online_count' => $promptManager->getSetting('online_count'),
-                        'placeholder_title' => $promptManager->getSetting('placeholder_title'),
-                        'placeholder_description' => $promptManager->getSetting('placeholder_description'),
-                        'gallery_title' => $promptManager->getSetting('gallery_title'),
-                        'gallery_description' => $promptManager->getSetting('gallery_description')
-                    ]
-                ]);
+                $pageDataArray = getPageData(); $pageDataArray['stats'] = $promptManager->getStats();
+                jsonResponse(true, 'ดึงข้อมูลสำเร็จ', $pageDataArray);
                 break;
-                
             case 'logout':
-                adminLogout();
-                jsonResponse(true, 'ออกจากระบบสำเร็จ');
+                adminLogout(); jsonResponse(true, 'ออกจากระบบสำเร็จ');
                 break;
-                
             default:
-                jsonResponse(false, 'Invalid action');
+                jsonResponse(false, 'Invalid action: ' . htmlspecialchars($action));
         }
     } catch (Exception $e) {
-        error_log('Admin action error: ' . $e->getMessage());
-        jsonResponse(false, 'เกิดข้อผิดพลาด: ' . $e->getMessage());
+        error_log('Admin action error: ' . $e->getMessage() . ' on action: ' . $action);
+        jsonResponse(false, 'เกิดข้อผิดพลาดในระบบ: ' . $e->getMessage());
     }
     exit;
 }
+// --- END: AJAX Handler ---
+
 
 // ดึงข้อมูลเริ่มต้น
 $promptManager = new PromptManager();
-$pageData = [
-    'examples' => $promptManager->getAllExamples(),
-    'gallery' => $promptManager->getAllGalleryItems(),
-    'stats' => $promptManager->getStats(),
-    'settings' => [
-        'site_title' => $promptManager->getSetting('site_title'),
-        'site_description' => $promptManager->getSetting('site_description'),
-        'online_count' => $promptManager->getSetting('online_count'),
-        'placeholder_title' => $promptManager->getSetting('placeholder_title'),
-        'placeholder_description' => $promptManager->getSetting('placeholder_description'),
-        'gallery_title' => $promptManager->getSetting('gallery_title'),
-        'gallery_description' => $promptManager->getSetting('gallery_description')
-    ]
-];
+$pageData = getPageData();
+$pageData['stats'] = $promptManager->getStats();
+
 ?>
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Backend - AI Prompt Generator Pro</title>
+    <title>Admin Backend - <?php echo htmlspecialchars($pageData['settings']['site_title'] ?? SITE_TITLE); ?></title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        /* ... (CSS ทั้งหมดจากไฟล์ที่คุณให้มาล่าสุด) ... */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-        
-        .admin-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .admin-header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-        
-        .admin-header h1 {
-            color: #667eea;
-            font-size: 2.5em;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-        
-        .admin-header p {
-            color: #666;
-            font-size: 1.1em;
-        }
-        
-        .logout-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-        
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
-        }
-        
-        .admin-nav {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .nav-btn {
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            padding: 15px 30px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            color: #667eea;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        .nav-btn.active, .nav-btn:hover {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
-        }
-        
-        .admin-section {
-            display: none;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-        
-        .admin-section.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .section-title {
-            font-size: 1.8em;
-            font-weight: 700;
-            color: #667eea;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 12px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.8);
-        }
-        
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        
-        .btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            font-size: 14px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn-danger {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
-        }
-        
-        .btn-danger:hover {
-            box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
-        }
-        
-        .btn-success {
-            background: linear-gradient(135deg, #20bf6b, #26a69a);
-            box-shadow: 0 10px 25px rgba(32, 191, 107, 0.3);
-        }
-        
-        .btn-success:hover {
-            box-shadow: 0 15px 35px rgba(32, 191, 107, 0.4);
-        }
-        
-        .items-grid {
-            display: grid;
-            gap: 20px;
-            margin-top: 30px;
-        }
-        
-        .item-card {
-            background: rgba(248, 250, 252, 0.8);
-            padding: 25px;
-            border-radius: 15px;
-            border: 1px solid #e1e5e9;
-            transition: all 0.3s ease;
-        }
-        
-        .item-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        .item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            gap: 15px;
-        }
-        
-        .item-title {
-            font-weight: 600;
-            color: #333;
-            flex: 1;
-        }
-        
-        .item-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .item-content {
-            background: rgba(255, 255, 255, 0.7);
-            padding: 15px;
-            border-radius: 10px;
-            font-family: 'SF Mono', Monaco, monospace;
-            font-size: 13px;
-            line-height: 1.5;
-            color: #555;
-            border: 1px solid #e1e5e9;
-            margin-bottom: 15px;
-            max-height: 120px;
-            overflow-y: auto;
-        }
-        
-        .gallery-item-card {
-            display: grid;
-            grid-template-columns: 200px 1fr;
-            gap: 20px;
-            align-items: start;
-        }
-        
-        .gallery-image-preview {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 10px;
-            border: 2px solid #e1e5e9;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .modal.active {
-            display: flex;
-        }
-        
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-        
-        .modal-header {
-            font-size: 1.5em;
-            font-weight: 700;
-            color: #667eea;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 25px;
-            background: none;
-            border: none;
-            font-size: 1.5em;
-            cursor: pointer;
-            color: #999;
-            transition: color 0.3s ease;
-        }
-        
-        .close-modal:hover {
-            color: #333;
-        }
-        
-        .image-preview {
-            width: 100%;
-            max-width: 200px;
-            height: auto;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border: 2px solid #e1e5e9;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .stat-card {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .stat-number {
-            font-size: 2.5em;
-            font-weight: 800;
-            color: #667eea;
-            display: block;
-        }
-        
-        .stat-label {
-            color: #666;
-            font-weight: 600;
-            margin-top: 5px;
-        }
-        
-        .alert {
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: none;
-            animation: slideDown 0.3s ease;
-        }
-        
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .alert.success {
-            background: rgba(32, 191, 107, 0.1);
-            border: 1px solid rgba(32, 191, 107, 0.3);
-            color: #20bf6b;
-        }
-        
-        .alert.error {
-            background: rgba(255, 107, 107, 0.1);
-            border: 1px solid rgba(255, 107, 107, 0.3);
-            color: #ff6b6b;
-        }
-        
-        /* User Management Styles */
-        .user-filters {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        
-        .user-filters input,
-        .user-filters select {
-            padding: 10px 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-        
-        .user-filters input {
-            min-width: 250px;
-            flex: 1;
-        }
-        
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .users-table th,
-        .users-table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #e1e5e9;
-        }
-        
-        .users-table th {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            font-weight: 600;
-        }
-        
-        .users-table tr:hover {
-            background: rgba(102, 126, 234, 0.05);
-        }
-        
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        
-        .member-badge {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        
-        .member-badge.free {
-            background: rgba(108, 117, 125, 0.1);
-            color: #6c757d;
-        }
-        
-        .member-badge.monthly {
-            background: rgba(0, 123, 255, 0.1);
-            color: #007bff;
-        }
-        
-        .member-badge.yearly {
-            background: rgba(255, 193, 7, 0.1);
-            color: #ffc107;
-        }
-        
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .pagination button {
-            padding: 8px 12px;
-            border: 1px solid #e1e5e9;
-            background: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .pagination button:hover,
-        .pagination button.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        
-        .pagination button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        .placeholder-message {
-            text-align: center;
-            padding: 60px 20px;
-            color: #94a3b8;
-        }
-        
-        .placeholder-message i {
-            font-size: 3em;
-            margin-bottom: 15px;
-            display: block;
-            opacity: 0.5;
-        }
-        
-        .placeholder-message p {
-            font-size: 1.1em;
-            color: #64748b;
-        }
-        
-        @media (max-width: 768px) {
-            .admin-container {
-                padding: 10px;
-            }
-            
-            .admin-header {
-                padding: 20px;
-            }
-            
-            .admin-header h1 {
-                font-size: 1.8em;
-            }
-            
-            .logout-btn {
-                position: static;
-                margin-top: 20px;
-            }
-            
-            .admin-nav {
-                flex-direction: column;
-            }
-            
-            .nav-btn {
-                justify-content: center;
-                padding: 12px 20px;
-            }
-            
-            .admin-section {
-                padding: 20px;
-            }
-            
-            .gallery-item-card {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
-            .modal-content {
-                padding: 20px;
-                margin: 20px;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .users-table {
-                font-size: 12px;
-            }
-            
-            .users-table th,
-            .users-table td {
-                padding: 10px 8px;
-            }
-            
-            .user-filters {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .user-filters input {
-                min-width: auto;
-            }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif; background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); min-height: 100vh; color: #374151; } /* ปรับสีพื้นหลัง */
+        .admin-container { max-width: 1600px; margin: 0 auto; padding: 20px;}
+        .admin-header { background: white; padding: 25px 30px; border-radius: 12px; text-align: center; margin-bottom: 25px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); position: relative; }
+        .admin-header h1 { color: #4f46e5; font-size: 2.2em; font-weight: 700; margin-bottom: 8px; }
+        .admin-header p { color: #6b7280; font-size: 1em; }
+        .logout-btn { position: absolute; top: 25px; right: 25px; background: #ef4444; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 500; display: flex; align-items: center; gap: 8px; transition: background-color 0.3s ease; }
+        .logout-btn:hover { background: #dc2626; }
+        .admin-nav { display: flex; gap: 10px; margin-bottom: 25px; justify-content: flex-start; flex-wrap: wrap; padding: 10px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .nav-btn { background: #f9fafb; border: 1px solid #e5e7eb; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.2s ease-in-out; color: #4b5563; font-size: 0.9em; display: flex; align-items: center; gap: 8px; }
+        .nav-btn.active, .nav-btn:hover { background: #4f46e5; color: white; border-color: #4f46e5; transform: translateY(-1px); box-shadow: 0 6px 12px rgba(79, 70, 229, 0.2); }
+        .admin-section { display: none; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); margin-bottom: 25px; }
+        .admin-section.active { display: block; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .section-title { font-size: 1.6em; font-weight: 600; color: #374151; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb;}
+        .section-title .btn { padding: 10px 18px; font-size: 0.9em; margin-left:auto;}
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 500; color: #4b5563; font-size: 0.9em;}
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.95em; transition: border-color 0.2s ease, box-shadow 0.2s ease; background: #f9fafb; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #4f46e5; box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15); background: white; }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+        .btn { background: #4f46e5; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 500; transition: background-color 0.3s ease, transform 0.2s ease; font-size: 0.95em; display: inline-flex; align-items: center; gap: 6px; }
+        .btn:hover { background: #4338ca; transform: translateY(-1px); }
+        .btn-danger { background: #ef4444; } .btn-danger:hover { background: #dc2626; }
+        .btn-success { background: #10b981; } .btn-success:hover { background: #059669; }
+        .btn-warning { background: #f59e0b; color:white;} .btn-warning:hover { background: #d97706; }
+        .items-grid { display: grid; gap: 18px; margin-top: 20px; }
+        .item-card { background: #f9fafb; padding: 20px; border-radius: 10px; border: 1px solid #e5e7eb; transition: box-shadow 0.3s ease; }
+        .item-card:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.07); }
+        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px; }
+        .item-title { font-weight: 500; color: #1f2937; flex: 1; font-size: 1.05em; }
+        .item-actions { display: flex; gap: 8px; }
+        .item-actions .btn { padding: 8px 12px; font-size:0.85em;}
+        .item-content { background: white; padding: 12px; border-radius: 6px; font-family: 'SF Mono', Monaco, monospace; font-size: 0.85em; line-height: 1.6; color: #4b5563; border: 1px solid #e5e7eb; margin-bottom: 12px; max-height: 100px; overflow-y: auto; }
+        .gallery-item-card { display: grid; grid-template-columns: 150px 1fr; gap: 15px; align-items: flex-start; } 
+        .gallery-image-preview { width: 100%; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid #e5e7eb; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; padding: 15px; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; padding: 25px; border-radius: 12px; max-width: 550px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .modal-header { font-size: 1.4em; font-weight: 600; color: #4f46e5; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+        .close-modal { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.4em; cursor: pointer; color: #9ca3af; transition: color 0.2s ease; }
+        .close-modal:hover { color: #374151; }
+        .image-preview { width: 100%; max-width: 180px; height: auto; border-radius: 8px; margin-bottom: 12px; border: 1px solid #e5e7eb; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px; margin-bottom: 25px; }
+        .stat-card { background: #f9fafb; border: 1px solid #e5e7eb; padding: 20px; border-radius: 10px; text-align: center; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.06); }
+        .stat-number { font-size: 2.2em; font-weight: 700; color: #4f46e5; display: block; }
+        .stat-label { color: #6b7280; font-weight: 500; margin-top: 4px; font-size: 0.9em; }
+        .alert { padding: 12px 18px; border-radius: 8px; margin: 0 0 20px 0; display: none; animation: slideDown 0.3s ease-out; font-size: 0.95em; position:fixed; top: 80px; right: 20px; z-index: 1001; min-width: 300px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);}
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
+        .alert.success { background: #dcfce7; border: 1px solid #86efac; color: #15803d; }
+        .alert.error { background: #fee2e2; border: 1px solid #fca5a5; color: #b91c1c; }
+        .user-filters { display: flex; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; align-items: center; }
+        .user-filters input, .user-filters select { padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9em; background: #f9fafb;}
+        .user-filters input { min-width: 220px; flex: 1; }
+        .users-table { width: 100%; border-collapse: collapse; margin-top: 18px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-size: 0.9em;}
+        .users-table th, .users-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #f3f4f6; }
+        .users-table th { background: #f9fafb; color: #4b5563; font-weight: 500; text-transform: uppercase; font-size:0.8em; letter-spacing: 0.5px;}
+        .users-table tr:hover { background: #f3f4f6; }
+        .user-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+        .member-badge { padding: 3px 7px; border-radius: 10px; font-size: 0.75em; font-weight: 500; text-transform: uppercase; }
+        .member-badge.free { background: #e5e7eb; color: #4b5563; } .member-badge.monthly { background: #dbeafe; color: #2563eb; } .member-badge.yearly { background: #fef3c7; color: #d97706; }
+        .status-badge { padding: 3px 7px; border-radius: 10px; font-size: 0.75em; font-weight: 500; text-transform: capitalize;}
+        .status-badge.active { background: #dcfce7; color: #16a34a;}
+        .status-badge.suspended { background: #fef3c7; color: #d97706;}
+        .status-badge.deleted { background: #fee2e2; color: #dc2626;}
+        .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 18px; }
+        .pagination button { padding: 7px 10px; border: 1px solid #e5e7eb; background: white; border-radius: 5px; cursor: pointer; transition: all 0.2s ease; font-size: 0.85em;}
+        .pagination button:hover, .pagination button.active { background: #4f46e5; color: white; border-color: #4f46e5; }
+        .pagination button:disabled { opacity: 0.6; cursor: not-allowed; }
+        .placeholder-message { text-align: center; padding: 50px 20px; color: #9ca3af; }
+        .placeholder-message i { font-size: 2.5em; margin-bottom: 12px; display: block; opacity: 0.6; }
+        .placeholder-message p { font-size: 1em; color: #6b7280; }
+        #marketplace-prompts-table th, #marketplace-prompts-table td { vertical-align: middle; }
+        #marketplace-prompts-table .prompt-image-admin { max-width: 100px; max-height: 70px; border-radius: 5px; object-fit: cover; }
+        #marketplace-prompts-table .prompt-text-admin { max-height: 60px; overflow-y: auto; font-size: 0.8em; background-color: #f8f9fa; padding: 5px; border-radius: 3px; border: 1px solid #e9ecef; white-space: pre-wrap; word-break: break-all;}
+        #marketplace-prompts-table .badge-status { padding: .35em .65em; font-size: .75em; font-weight: 700; line-height: 1; color: #fff; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25rem; }
+        #marketplace-prompts-table .badge-status.pending_approval { background-color: #ffc107; color: #212529;}
+        #marketplace-prompts-table .badge-status.approved { background-color: #28a745;}
+        #marketplace-prompts-table .badge-status.rejected { background-color: #dc3545;}
+        #settings_marketplace .form-group { border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
+        #settings_marketplace .form-group:last-child { border-bottom: none; }
+        @media (max-width: 768px) { /* Additional responsive fixes for smaller tables */
+            .admin-container { padding: 10px; } .admin-header { padding: 20px; } .admin-header h1 { font-size: 1.8em; }
+            .logout-btn { position: static; margin-top: 15px; } .admin-nav { flex-direction: column; }
+            .nav-btn { justify-content: center; padding: 10px 15px; font-size: 0.95em; } .admin-section { padding: 15px; }
+            .gallery-item-card { grid-template-columns: 1fr; gap: 12px; } .modal-content { padding: 20px; margin: 15px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .users-table, #marketplace-prompts-table { font-size: 0.85em; } 
+            .users-table th, .users-table td, #marketplace-prompts-table th, #marketplace-prompts-table td { padding: 8px 6px; word-break: break-word; }
+            .user-filters { flex-direction: column; align-items: stretch; } .user-filters input { min-width: auto; }
+            #marketplace-prompts-table .prompt-image-admin { max-width: 70px; max-height: 50px; }
         }
     </style>
 </head>
@@ -1000,289 +363,143 @@ $pageData = [
             <button class="logout-btn" onclick="logout()">
                 <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
             </button>
-            <h1><i class="fas fa-shield-alt"></i> Admin Backend</h1>
-            <p>จัดการเนื้อหาและการตั้งค่าของ AI Prompt Generator Pro</p>
+            <h1><i class="fas fa-user-shield"></i> Admin Panel</h1>
+            <p>จัดการเนื้อหาและการตั้งค่าของ <?php echo htmlspecialchars($pageData['settings']['site_title'] ?? SITE_TITLE); ?></p>
         </div>
         
         <div class="admin-nav">
-            <button class="nav-btn active" onclick="showSection('dashboard')">
-                <i class="fas fa-chart-bar"></i> Dashboard
-            </button>
-            <button class="nav-btn" onclick="showSection('users')">
+            <button class="nav-btn active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+            <button class="nav-btn" data-section="users"><i class="fas fa-users-cog"></i> จัดการสมาชิก</button>
+            <button class="nav-btn" data-section="marketplace_prompts"><i class="fas fa-store"></i> อนุมัติ Prompt ขาย</button>
+            <button class="nav-btn" data-section="examples"><i class="fas fa-lightbulb"></i> Prompt ยอดนิยม</button>
+            <button class="nav-btn" data-section="gallery"><i class="fas fa-photo-video"></i> แกลเลอรี่</button>
+            <button class="nav-btn" data-section="messages"><i class="fas fa-envelope-open-text"></i> ข้อความเว็บ</button>
+            <button class="nav-btn" data-section="settings_general"><i class="fas fa-cogs"></i> ตั้งค่าทั่วไป</button>
+            <button class="nav-btn" data-section="settings_marketplace"><i class="fas fa-sliders-h"></i> ตั้งค่า Marketplace</button>
+        </div>
+        
+        <div id="alert-container"></div>
 
-                <i class="fas fa-users"></i> จัดการสมาชิก
-            </button>
-            <button class="nav-btn" onclick="showSection('examples')">
-                <i class="fas fa-star"></i> Prompt ยอดนิยม
-            </button>
-            <button class="nav-btn" onclick="showSection('gallery')">
-                <i class="fas fa-images"></i> แกลเลอรี่
-            </button>
-            <button class="nav-btn" onclick="showSection('messages')">
-                <i class="fas fa-comment"></i> ข้อความ
-            </button>
-            <button class="nav-btn" onclick="showSection('settings')">
-                <i class="fas fa-cog"></i> ตั้งค่า
-            </button>
-        </div>
-        
-        <!-- Dashboard Section -->
+
         <div id="dashboard" class="admin-section active">
-            <div class="section-title">
-                <span><i class="fas fa-chart-bar"></i> Dashboard</span>
-            </div>
-            
+             <div class="section-title"><span><i class="fas fa-tachometer-alt"></i> Dashboard</span></div>
             <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-number" id="total-examples"><?php echo $pageData['stats']['total_examples']; ?></span>
-                    <div class="stat-label">Prompt ยอดนิยม</div>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number" id="total-gallery"><?php echo $pageData['stats']['total_gallery']; ?></span>
-                    <div class="stat-label">รายการแกลเลอรี่</div>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number" id="total-user-prompts"><?php echo $pageData['stats']['total_user_prompts']; ?></span>
-                    <div class="stat-label">Prompt ที่ผู้ใช้สร้าง</div>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number" id="today-prompts"><?php echo $pageData['stats']['today_prompts']; ?></span>
-                    <div class="stat-label">Prompt วันนี้</div>
-                </div>
+                <div class="stat-card"><span class="stat-number" id="total-examples"><?php echo htmlspecialchars($pageData['stats']['total_examples']); ?></span><div class="stat-label">Prompt ยอดนิยม</div></div>
+                <div class="stat-card"><span class="stat-number" id="total-gallery"><?php echo htmlspecialchars($pageData['stats']['total_gallery']); ?></span><div class="stat-label">รายการแกลเลอรี่</div></div>
+                <div class="stat-card"><span class="stat-number" id="total-user-prompts"><?php echo htmlspecialchars($pageData['stats']['total_user_prompts']); ?></span><div class="stat-label">Prompt ที่ผู้ใช้สร้าง</div></div>
+                <div class="stat-card"><span class="stat-number" id="today-prompts"><?php echo htmlspecialchars($pageData['stats']['today_prompts']); ?></span><div class="stat-label">Prompt วันนี้</div></div>
+                <div class="stat-card"><span class="stat-number" id="stat-sellable-prompts"><?php echo htmlspecialchars($pageData['stats']['total_sellable_prompts'] ?? 0); ?></span><div class="stat-label">Prompt ที่ขาย (อนุมัติแล้ว)</div></div>
+                <div class="stat-card"><span class="stat-number" id="stat-transactions"><?php echo htmlspecialchars($pageData['stats']['total_transactions'] ?? 0); ?></span><div class="stat-label">จำนวนการซื้อขาย</div></div>
             </div>
         </div>
         
-        <!-- User Management Section -->
         <div id="users" class="admin-section">
-            <div class="section-title">
-                <span><i class="fas fa-users"></i> จัดการสมาชิก</span>
-            </div>
-            
+            <div class="section-title"><span><i class="fas fa-users-cog"></i> จัดการสมาชิก</span></div>
             <div class="user-filters">
                 <input type="text" id="user-search" placeholder="ค้นหาสมาชิก (username, email, ชื่อ)">
                 <select id="user-filter">
-                    <option value="all">ทุกประเภท</option>
-                    <option value="free">สมาชิกฟรี</option>
-                    <option value="monthly">รายเดือน</option>
-                    <option value="yearly">รายปี</option>
+                    <option value="all">ทุกประเภท</option> <option value="free">ฟรี</option> <option value="monthly">รายเดือน</option> <option value="yearly">รายปี</option>
                 </select>
-                <button class="btn" onclick="searchUsers()">
-                    <i class="fas fa-search"></i> ค้นหา
-                </button>
+                <button class="btn" onclick="searchUsers()"><i class="fas fa-search"></i> ค้นหา</button>
             </div>
-            
-            <table class="users-table" id="users-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Avatar</th>
-                        <th>Username</th>
-                        <th>ชื่อ-สกุล</th>
-                        <th>Email</th>
-                        <th>ประเภทสมาชิก</th>
-                        <th>วันหมดอายุ</th>
-                        <th>สร้างเมื่อ</th>
-                        <th>จัดการ</th>
-                    </tr>
-                </thead>
-                <tbody id="users-tbody">
-                    <!-- Users will be loaded here -->
-                </tbody>
-            </table>
-            
-            <div class="pagination" id="users-pagination">
-                <!-- Pagination will be loaded here -->
+            <div style="overflow-x: auto;">
+                <table class="users-table" id="users-table">
+                    <thead><tr><th>ID</th><th>Avatar</th><th>Username</th><th>ชื่อ-สกุล</th><th>Email</th><th>ประเภท</th><th>แต้ม</th><th>วันหมดอายุ</th><th>สถานะ</th><th>สร้างเมื่อ</th><th>จัดการ</th></tr></thead>
+                    <tbody id="users-tbody"></tbody>
+                </table>
             </div>
+            <div class="pagination" id="users-pagination"></div>
         </div>
-        
-        <!-- Examples Section -->
+
+        <div id="marketplace_prompts" class="admin-section">
+            <div class="section-title"><span><i class="fas fa-store"></i> จัดการ Prompt ที่ส่งมาขาย</span></div>
+             <div class="user-filters">
+                <select id="marketplace-prompt-filter" onchange="loadPendingSellablePrompts(1)">
+                    <option value="pending_approval">รออนุมัติ</option>
+                    <option value="approved">อนุมัติแล้ว</option>
+                    <option value="rejected">ถูกปฏิเสธ</option>
+                    <option value="all">ทั้งหมด</option>
+                </select>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="users-table" id="marketplace-prompts-table"> <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>ผู้ขาย</th>
+                            <th>หัวข้อ</th>
+                            <th>รูปภาพ</th>
+                            <th>Prompt จริง (ตัวอย่าง)</th>
+                            <th>ราคา (แต้ม)</th>
+                            <th>Tags</th>
+                            <th>สถานะ</th>
+                            <th>วันที่ส่ง</th>
+                            <th>จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="marketplace-prompts-tbody">
+                        </tbody>
+                </table>
+            </div>
+            <div class="pagination" id="marketplace-prompts-pagination"></div>
+        </div>
         <div id="examples" class="admin-section">
-            <div class="section-title">
-                <span><i class="fas fa-star"></i> จัดการ Prompt ยอดนิยม</span>
-                <button class="btn" onclick="openExampleModal()">
-                    <i class="fas fa-plus"></i> เพิ่มใหม่
-                </button>
-            </div>
-            
-            <div class="items-grid" id="examples-list">
-                <!-- Examples will be loaded here -->
-            </div>
+            <div class="section-title"><span><i class="fas fa-lightbulb"></i> จัดการ Prompt ยอดนิยม</span><button class="btn" onclick="openExampleModal()"><i class="fas fa-plus"></i> เพิ่มใหม่</button></div>
+            <div class="items-grid" id="examples-list"></div>
         </div>
         
-        <!-- Gallery Section -->
         <div id="gallery" class="admin-section">
-            <div class="section-title">
-                <span><i class="fas fa-images"></i> จัดการแกลเลอรี่ Prompt</span>
-                <button class="btn" onclick="openGalleryModal()">
-                    <i class="fas fa-plus"></i> เพิ่มใหม่
-                </button>
-            </div>
-            
-            <div class="items-grid" id="gallery-list">
-                <!-- Gallery items will be loaded here -->
-            </div>
+            <div class="section-title"><span><i class="fas fa-photo-video"></i> จัดการแกลเลอรี่</span><button class="btn" onclick="openGalleryModal()"><i class="fas fa-plus"></i> เพิ่มใหม่</button></div>
+            <div class="items-grid" id="gallery-list"></div>
         </div>
         
-        <!-- Messages Section -->
         <div id="messages" class="admin-section">
-            <div class="section-title">
-                <span><i class="fas fa-comment"></i> จัดการข้อความ</span>
-            </div>
-            
-            <div class="form-group">
-                <label>ข้อความแสดงในส่วน "เริ่มสร้าง Prompt ของคุณ"</label>
-                <input type="text" id="placeholder-title" value="<?php echo htmlspecialchars($pageData['settings']['placeholder_title']); ?>" placeholder="หัวข้อ">
-            </div>
-            
-            <div class="form-group">
-                <label>คำอธิบาย</label>
-                <textarea id="placeholder-description" placeholder="คำอธิบาย"><?php echo htmlspecialchars($pageData['settings']['placeholder_description']); ?></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label>ข้อความหัวข้อแกลเลอรี่</label>
-                <input type="text" id="gallery-title" value="<?php echo htmlspecialchars($pageData['settings']['gallery_title']); ?>" placeholder="หัวข้อแกลเลอรี่">
-            </div>
-            
-            <div class="form-group">
-                <label>คำอธิบายแกลเลอรี่</label>
-                <textarea id="gallery-description" placeholder="คำอธิบายแกลเลอรี่"><?php echo htmlspecialchars($pageData['settings']['gallery_description']); ?></textarea>
-            </div>
-            
-            <button class="btn btn-success" onclick="saveMessages()">
-                <i class="fas fa-save"></i> บันทึกข้อความ
-            </button>
+            <div class="section-title"><span><i class="fas fa-envelope-open-text"></i> จัดการข้อความแสดงผลทั่วไป</span></div>
+            <div class="form-group"><label>ข้อความส่วน "เริ่มสร้าง Prompt ของคุณ" (Title)</label><input type="text" id="placeholder-title" class="form-control" value="<?php echo htmlspecialchars($pageData['settings']['placeholder_title'] ?? ''); ?>"></div>
+            <div class="form-group"><label>คำอธิบาย</label><textarea id="placeholder-description" class="form-control"><?php echo htmlspecialchars($pageData['settings']['placeholder_description'] ?? ''); ?></textarea></div>
+            <div class="form-group"><label>ข้อความหัวข้อแกลเลอรี่ (Title)</label><input type="text" id="gallery-title-input-setting" class="form-control" value="<?php echo htmlspecialchars($pageData['settings']['gallery_title'] ?? ''); ?>"></div>
+            <div class="form-group"><label>คำอธิบายแกลเลอรี่</label><textarea id="gallery-description-setting" class="form-control"><?php echo htmlspecialchars($pageData['settings']['gallery_description'] ?? ''); ?></textarea></div>
+            <button class="btn btn-success" onclick="saveGeneralMessages()"><i class="fas fa-save"></i> บันทึกข้อความ</button>
         </div>
         
-        <!-- Settings Section -->
-        <div id="settings" class="admin-section">
-            <div class="section-title">
-                <span><i class="fas fa-cog"></i> ตั้งค่าระบบ</span>
-            </div>
-            
+        <div id="settings_general" class="admin-section">
+            <div class="section-title"><span><i class="fas fa-cogs"></i> ตั้งค่าทั่วไป</span></div>
+            <div class="form-group"><label>จำนวนผู้ใช้ออนไลน์ (ตัวเลขสมมติสำหรับแสดงผล)</label><input type="number" id="online-count" class="form-control" value="<?php echo htmlspecialchars($pageData['settings']['online_count'] ?? '100'); ?>" min="1"></div>
+            <div class="form-group"><label>หัวข้อหลักของเว็บไซต์ (Site Title)</label><input type="text" id="site-title" class="form-control" value="<?php echo htmlspecialchars($pageData['settings']['site_title'] ?? SITE_TITLE); ?>"></div>
+            <div class="form-group"><label>คำอธิบายย่อของเว็บไซต์ (Site Description)</label><textarea id="site-description" class="form-control"><?php echo htmlspecialchars($pageData['settings']['site_description'] ?? ''); ?></textarea></div>
+            <button class="btn btn-success" onclick="saveGeneralSettings()"><i class="fas fa-save"></i> บันทึกการตั้งค่าทั่วไป</button>
+        </div>
+
+        <div id="settings_marketplace" class="admin-section">
+            <div class="section-title"><span><i class="fas fa-sliders-h"></i> ตั้งค่า Marketplace</span></div>
             <div class="form-group">
-                <label>จำนวนผู้ใช้ออนไลน์ (แสดงผล)</label>
-                <input type="number" id="online-count" value="<?php echo htmlspecialchars($pageData['settings']['online_count']); ?>" min="50" max="500">
+                <label for="commission-rate">อัตราค่าบริการ (%)</label>
+                <input type="number" id="commission-rate" class="form-control" value="<?php echo htmlspecialchars($promptManager->getSetting('commission_rate', 5)); ?>" min="0" max="100" step="0.1">
+                <small>เมื่อมีการขาย Prompt ระบบจะหักค่าบริการตาม % นี้จากผู้ขาย</small>
             </div>
-            
             <div class="form-group">
-                <label>หัวข้อหลักของเว็บไซต์</label>
-                <input type="text" id="site-title" value="<?php echo htmlspecialchars($pageData['settings']['site_title']); ?>" placeholder="หัวข้อเว็บไซต์">
+                <label for="default-prompt-price">ราคา Prompt เริ่มต้น (แต้ม)</label>
+                <input type="number" id="default-prompt-price" class="form-control" value="<?php echo htmlspecialchars($promptManager->getSetting('default_prompt_price', 10)); ?>" min="1">
+                <small>ราคาเริ่มต้นที่แนะนำเมื่อสมาชิกโพสต์ขาย Prompt</small>
             </div>
-            
-            <div class="form-group">
-                <label>คำอธิบายหัวข้อ</label>
-                <textarea id="site-description" placeholder="คำอธิบายเว็บไซต์"><?php echo htmlspecialchars($pageData['settings']['site_description']); ?></textarea>
-            </div>
-            
-            <button class="btn btn-success" onclick="saveSettings()">
-                <i class="fas fa-save"></i> บันทึกการตั้งค่า
+            <button class="btn btn-success" onclick="saveMarketplaceSettings()">
+                <i class="fas fa-save"></i> บันทึกการตั้งค่า Marketplace
             </button>
         </div>
-    </div>
+        </div>
     
-    <!-- User Edit Modal -->
-    <div id="user-modal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeModal('user-modal')">&times;</button>
-            <div class="modal-header">
-                <i class="fas fa-user-edit"></i> <span id="user-modal-title">แก้ไขข้อมูลสมาชิก</span>
-            </div>
-            
-            <div id="user-info-display" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-                <!-- User info will be displayed here -->
-            </div>
-            
-            <div class="form-group">
-                <label>ประเภทสมาชิก</label>
-                <select id="user-member-type">
-                    <option value="free">สมาชิกฟรี</option>
-                    <option value="monthly">สมาชิกรายเดือน</option>
-                    <option value="yearly">สมาชิกรายปี</option>
-                </select>
-            </div>
-            
-            <div class="form-group" id="expire-date-group">
-                <label>วันหมดอายุ</label>
-                <input type="date" id="user-expire-date">
-                <small style="color: #666;">สำหรับสมาชิกรายเดือน/รายปี</small>
-            </div>
-            
-            <button class="btn btn-success" onclick="saveUserMembership()">
-                <i class="fas fa-save"></i> บันทึกการเปลี่ยนแปลง
-            </button>
+    <div id="user-modal" class="modal"> <div class="modal-content"> <button class="close-modal" onclick="closeModal('user-modal')">&times;</button> <div class="modal-header"><i class="fas fa-user-edit"></i> <span id="user-modal-title">แก้ไขข้อมูลสมาชิก</span></div> <div id="user-info-display" style="margin-bottom: 15px; padding: 12px; background: #f3f4f6; border-radius: 6px; font-size:0.9em;"></div> <div class="form-group"><label>ประเภทสมาชิก</label><select id="user-member-type" class="form-control" onchange="handleMemberTypeChange()"><option value="free">ฟรี</option><option value="monthly">รายเดือน</option><option value="yearly">รายปี</option></select></div> <div class="form-group" id="expire-date-group"><label>วันหมดอายุ</label><input type="date" id="user-expire-date" class="form-control"><small style="color: #6b7280; font-size:0.8em;">สำหรับสมาชิกรายเดือน/รายปี</small></div> <div class="form-group"><label>แต้มสะสม (Points)</label><input type="number" id="user-points-balance" class="form-control" min="0"></div> <button class="btn btn-success" onclick="saveUserMembership()"><i class="fas fa-save"></i> บันทึก</button> </div> </div>
+    <div id="example-modal" class="modal"><div class="modal-content"><button class="close-modal" onclick="closeModal('example-modal')">&times;</button><div class="modal-header"><i class="fas fa-lightbulb"></i> <span id="example-modal-title">เพิ่ม Prompt</span></div><div class="form-group"><label>ชื่อ/หัวข้อ</label><input type="text" id="example-title" class="form-control"></div><div class="form-group"><label>Prompt</label><textarea id="example-prompt" class="form-control"></textarea></div><div class="form-group"><label>ไอคอน (Font Awesome)</label><input type="text" id="example-icon" class="form-control" value="fas fa-image"></div><button class="btn btn-success" onclick="saveExample()"><i class="fas fa-save"></i> บันทึก</button></div></div>
+    <div id="gallery-modal" class="modal"><div class="modal-content"><button class="close-modal" onclick="closeModal('gallery-modal')">&times;</button><div class="modal-header"><i class="fas fa-photo-video"></i> <span id="gallery-modal-title">เพิ่มรายการแกลเลอรี่</span></div><div class="form-group"><label>ชื่อ/หัวข้อ</label><input type="text" id="gallery-title-input" class="form-control"></div><div class="form-group"><label>คำอธิบาย</label><input type="text" id="gallery-desc" class="form-control"></div><div class="form-group"><label>URL รูปภาพ</label><input type="url" id="gallery-image" class="form-control" onchange="previewImage(this.value, 'gallery-preview')"><img id="gallery-preview" class="image-preview" style="display: none;"></div><div class="form-group"><label>Prompt</label><textarea id="gallery-prompt" class="form-control"></textarea></div><div class="form-group"><label>ไอคอน (Font Awesome)</label><input type="text" id="gallery-icon" class="form-control" value="fas fa-image"></div><button class="btn btn-success" onclick="saveGalleryItem()"><i class="fas fa-save"></i> บันทึก</button></div></div>
+    
+    <div id="marketplace-prompt-detail-modal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <button class="close-modal" onclick="closeModal('marketplace-prompt-detail-modal')">&times;</button>
+            <div class="modal-header"><i class="fas fa-store-alt"></i> รายละเอียด Prompt ขาย</div>
+            <div id="marketplace-prompt-detail-content" style="font-size:0.9em;"></div>
+            <div id="marketplace-prompt-actions" style="margin-top: 20px; text-align: right; display:flex; gap:10px; justify-content:flex-end;"></div>
         </div>
     </div>
-    
-    <!-- Example Modal -->
-    <div id="example-modal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeModal('example-modal')">&times;</button>
-            <div class="modal-header">
-                <i class="fas fa-star"></i> <span id="example-modal-title">เพิ่ม Prompt ยอดนิยม</span>
-            </div>
-            
-            <div class="form-group">
-                <label>ชื่อ/หัวข้อ</label>
-                <input type="text" id="example-title" placeholder="เช่น สาวสวยในสวนดอกไม้">
-            </div>
-            
-            <div class="form-group">
-                <label>Prompt</label>
-                <textarea id="example-prompt" placeholder="ใส่ Prompt ที่ต้องการ"></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label>ไอคอน (Font Awesome class)</label>
-                <input type="text" id="example-icon" placeholder="เช่น fas fa-image" value="fas fa-image">
-            </div>
-            
-            <button class="btn btn-success" onclick="saveExample()">
-                <i class="fas fa-save"></i> บันทึก
-            </button>
-        </div>
-    </div>
-    
-    <!-- Gallery Modal -->
-    <div id="gallery-modal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeModal('gallery-modal')">&times;</button>
-            <div class="modal-header">
-                <i class="fas fa-images"></i> <span id="gallery-modal-title">เพิ่มรายการแกลเลอรี่</span>
-            </div>
-            
-            <div class="form-group">
-                <label>ชื่อ/หัวข้อ</label>
-                <input type="text" id="gallery-title-input" placeholder="เช่น AI Robot Portrait">
-            </div>
-            
-            <div class="form-group">
-                <label>คำอธิบาย</label>
-                <input type="text" id="gallery-desc" placeholder="เช่น หุ่นยนต์ AI แบบไซเบอร์พังค์">
-            </div>
-            
-            <div class="form-group">
-                <label>URL รูปภาพ</label>
-                <input type="url" id="gallery-image" placeholder="https://example.com/image.jpg" onchange="previewImage(this.value)">
-                <img id="gallery-preview" class="image-preview" style="display: none;">
-            </div>
-            
-            <div class="form-group">
-                <label>Prompt</label>
-                <textarea id="gallery-prompt" placeholder="ใส่ Prompt ที่ต้องการ"></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label>ไอคอน (Font Awesome class)</label>
-                <input type="text" id="gallery-icon" placeholder="เช่น fas fa-robot" value="fas fa-image">
-            </div>
-            
-            <button class="btn btn-success" onclick="saveGalleryItem()">
-                <i class="fas fa-save"></i> บันทึก
-            </button>
-        </div>
-    </div>
-    
+
     <script>
         // Data from PHP
         let examplesData = <?php echo json_encode($pageData['examples']); ?>;
@@ -1290,734 +507,339 @@ $pageData = [
         let currentEditingExample = null;
         let currentEditingGallery = null;
         let currentEditingUser = null;
-        let currentPage = 1;
-        
-        // Navigation
-        function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.admin-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // Remove active class from all nav buttons
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
-            
-            // Add active class to clicked button
-            event.target.closest('.nav-btn').classList.add('active');
-            
-            // Load data for specific sections
-            if (sectionId === 'examples') {
-                loadExamples();
-            } else if (sectionId === 'gallery') {
-                loadGallery();
-            } else if (sectionId === 'dashboard') {
-                updateStats();
-            } else if (sectionId === 'users') {
-                loadUsers();
-            }
+        let currentMarketplacePromptsPage = 1;
+        let currentUsersPage = 1;
+        const avatarPlaceholder = 'data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2240%22%20height%3D%2240%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_179_svg%20text%20%7B%20fill%3A%23AAAAAA%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A10pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_179_svg%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22%23EEEEEE%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2212.5%22%20y%3D%2224.5%22%3EN/A%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E';
+
+
+        function htmlspecialchars(str) {
+            if (typeof str !== 'string' && typeof str !== 'number') return '';
+            str = String(str);
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return str.replace(/[&<>"']/g, function(m) { return map[m]; });
         }
-        
-        // User Management Functions
-        function loadUsers(page = 1) {
-            currentPage = page;
-            const search = document.getElementById('user-search')?.value || '';
-            const filter = document.getElementById('user-filter')?.value || 'all';
+
+        function showSection(sectionId, event = null) {
+            document.querySelectorAll('.admin-section').forEach(section => section.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             
-            const formData = new FormData();
-            formData.append('action', 'get_users');
-            formData.append('page', page);
-            formData.append('search', search);
-            formData.append('filter', filter);
-            
-            fetch('admin.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    renderUsersTable(data.data.users);
-                    renderPagination(data.data.page, data.data.pages);
-                } else {
-                    showAlert('error', data.message);
-                }
-            })
-            .catch(error => {
-                showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
-                console.error('Error:', error);
-            });
-        }
-        
-        function renderUsersTable(users) {
-            const tbody = document.getElementById('users-tbody');
-            tbody.innerHTML = '';
-            
-            if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="9" class="placeholder-message"><i class="fas fa-users"></i><p>ไม่พบข้อมูลสมาชิก</p></td></tr>';
+            const sectionElement = document.getElementById(sectionId);
+            if (sectionElement) {
+                sectionElement.classList.add('active');
+            } else {
+                console.error("Section not found: ", sectionId, ". Defaulting to dashboard.");
+                document.getElementById('dashboard').classList.add('active');
+                const defaultNavButton = document.querySelector('.nav-btn[data-section="dashboard"]');
+                if(defaultNavButton) defaultNavButton.classList.add('active');
                 return;
             }
             
-            users.forEach(user => {
-                const memberBadgeClass = user.member_type === 'free' ? 'free' : 
-                                       user.member_type === 'monthly' ? 'monthly' : 'yearly';
-                
-                const memberLabel = user.member_type === 'free' ? 'ฟรี' :
-                                  user.member_type === 'monthly' ? 'รายเดือน' : 'รายปี';
-                
-                const avatar = user.avatar_url || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
-                const expireDate = user.expire_date ? new Date(user.expire_date).toLocaleDateString('th-TH') : '-';
-                const createdDate = new Date(user.created_at).toLocaleDateString('th-TH');
-                
+            let clickedButton;
+            if (event && event.target) { // Check if event and event.target exist
+                clickedButton = event.target.closest('.nav-btn');
+            } else { // Fallback for programmatic calls or if event is null
+                clickedButton = document.querySelector(`.nav-btn[data-section="${sectionId}"]`);
+            }
+
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+            } else { // Fallback if no button found by data-section (e.g., initial load)
+                 const firstNavButton = document.querySelector('.admin-nav .nav-btn');
+                 if(firstNavButton) firstNavButton.classList.add('active');
+            }
+
+
+            if (sectionId === 'examples') loadExamples();
+            else if (sectionId === 'gallery') loadGallery();
+            else if (sectionId === 'dashboard') updateStats();
+            else if (sectionId === 'users') loadUsers(currentUsersPage);
+            else if (sectionId === 'marketplace_prompts') loadPendingSellablePrompts(currentMarketplacePromptsPage);
+            else if (sectionId === 'settings_marketplace') loadMarketplaceSettings();
+        }
+        
+        // --- START: Marketplace Admin JS ---
+        function loadPendingSellablePrompts(page = 1) {
+            currentMarketplacePromptsPage = page;
+            const filterStatus = document.getElementById('marketplace-prompt-filter').value;
+            const formData = new FormData();
+            formData.append('action', 'get_pending_sellable_prompts');
+            formData.append('page', page);
+            formData.append('status_filter', filterStatus);
+
+            fetch('admin.php', { method: 'POST', body: formData })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    renderMarketplacePromptsTable(data.data.prompts);
+                    renderMarketplacePromptsPagination(data.data.page, data.data.pages);
+                } else {
+                    showAlert('error', data.message || 'ไม่สามารถโหลดข้อมูล Prompt ได้');
+                    document.getElementById('marketplace-prompts-tbody').innerHTML = '<tr><td colspan="10" class="placeholder-message"><i class="fas fa-exclamation-triangle"></i><p>'+(data.message || 'ไม่สามารถโหลดข้อมูลได้')+'</p></td></tr>';
+                }
+            })
+            .catch(error => {
+                showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ (Marketplace Prompts)');
+                console.error('Error loading marketplace prompts:', error);
+                document.getElementById('marketplace-prompts-tbody').innerHTML = '<tr><td colspan="10" class="placeholder-message"><i class="fas fa-exclamation-triangle"></i><p>เกิดข้อผิดพลาดในการเชื่อมต่อ</p></td></tr>';
+            });
+        }
+
+        function renderMarketplacePromptsTable(prompts) {
+            const tbody = document.getElementById('marketplace-prompts-tbody');
+            tbody.innerHTML = '';
+            if (!prompts || prompts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" class="placeholder-message"><i class="fas fa-inbox"></i><p>ไม่พบ Prompt ที่ตรงเงื่อนไข</p></td></tr>';
+                return;
+            }
+            prompts.forEach(prompt => {
                 const row = document.createElement('tr');
+                row.setAttribute('data-prompt-id', prompt.id); // Store prompt id for easy access
+                const actualPromptShort = (prompt.actual_prompt && prompt.actual_prompt.length > 100) ? prompt.actual_prompt.substring(0, 100) + '...' : prompt.actual_prompt;
+                const createdDate = new Date(prompt.created_at).toLocaleDateString('th-TH', { year: '2-digit', month: 'short', day: 'numeric'});
+
                 row.innerHTML = `
-                    <td>${user.id}</td>
-                    <td><img src="${avatar}" class="user-avatar" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'"></td>
-                    <td><strong>${user.username}</strong></td>
-                    <td>${user.full_name}</td>
-                    <td>${user.email}</td>
-                    <td><span class="member-badge ${memberBadgeClass}">${memberLabel}</span></td>
-                    <td>${expireDate}</td>
+                    <td>${prompt.id}</td>
+                    <td>${htmlspecialchars(prompt.seller_username || 'N/A')}</td>
+                    <td>${htmlspecialchars(prompt.title)}</td>
+                    <td>${prompt.image_url ? `<img src="${htmlspecialchars(prompt.image_url)}" class="prompt-image-admin" onerror="this.style.display='none'; this.alt='Error';">` : '-'}</td>
+                    <td style="max-width: 200px;"><div class="prompt-text-admin" title="${htmlspecialchars(prompt.actual_prompt)}">${htmlspecialchars(actualPromptShort)}</div></td>
+                    <td>${prompt.price_points} <i class="fas fa-coins" style="color: #f59e0b;"></i></td>
+                    <td>${htmlspecialchars(prompt.tags) || '-'}</td>
+                    <td><span class="badge-status ${prompt.status}">${htmlspecialchars(prompt.status.replace('_', ' '))}</span></td>
                     <td>${createdDate}</td>
-                    <td>
-                        <button class="btn" onclick="editUser(${user.id})" style="padding: 8px 12px; font-size: 12px; margin-right: 5px;">
-                            <i class="fas fa-edit"></i> แก้ไข
-                        </button>
-                        ${user.id !== 1 ? `<button class="btn btn-danger" onclick="deleteUser(${user.id})" style="padding: 8px 12px; font-size: 12px;">
-                            <i class="fas fa-trash"></i> ลบ
-                        </button>` : ''}
+                    <td class="item-actions">
+                        <button class="btn btn-sm" onclick="viewMarketplacePromptDetail(${prompt.id})" style="background-color:#3b82f6;"><i class="fas fa-eye"></i></button>
+                        ${prompt.status === 'pending_approval' ? `
+                            <button class="btn btn-sm btn-success" onclick="approveSellablePrompt(${prompt.id}, this)"><i class="fas fa-check"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="rejectSellablePrompt(${prompt.id}, this)"><i class="fas fa-times"></i></button>
+                        ` : ''}
+                         ${prompt.status === 'approved' ? `
+                            <button class="btn btn-sm btn-warning" onclick="rejectSellablePrompt(${prompt.id}, this, 'rejected')"><i class="fas fa-ban"></i></button>
+                        ` : ''}
+                         ${prompt.status === 'rejected' ? `
+                             <button class="btn btn-sm btn-success" onclick="approveSellablePrompt(${prompt.id}, this)"><i class="fas fa-redo"></i></button>
+                        ` : ''}
                     </td>
                 `;
                 tbody.appendChild(row);
             });
         }
         
-        function renderPagination(currentPage, totalPages) {
-            const pagination = document.getElementById('users-pagination');
-            pagination.innerHTML = '';
-            
-            if (totalPages <= 1) return;
-            
-            // Previous button
-            const prevBtn = document.createElement('button');
-            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
-            prevBtn.disabled = currentPage === 1;
-            prevBtn.onclick = () => loadUsers(currentPage - 1);
-            pagination.appendChild(prevBtn);
-            
-            // Page numbers
-            for (let i = 1; i <= Math.min(totalPages, 5); i++) {
-                let page = i;
-                if (totalPages > 5) {
-                    if (currentPage > 3) {
-                        page = currentPage - 2 + i - 1;
-                        if (page > totalPages) break;
-                    }
-                }
-                
-                const pageBtn = document.createElement('button');
-                pageBtn.textContent = page;
-                pageBtn.className = page === currentPage ? 'active' : '';
-                pageBtn.onclick = () => loadUsers(page);
-                pagination.appendChild(pageBtn);
+        function viewMarketplacePromptDetail(promptId) {
+            const allPrompts = Array.from(document.querySelectorAll('#marketplace-prompts-tbody tr')).map(row => {
+                const statusBadge = row.cells[7].querySelector('.badge-status');
+                return {
+                    id: row.dataset.promptId,
+                    seller_username: row.cells[1].innerText,
+                    title: row.cells[2].innerText,
+                    image_url_html: row.cells[3].innerHTML, 
+                    actual_prompt: row.querySelector('.prompt-text-admin') ? row.querySelector('.prompt-text-admin').title : '',
+                    price_points: row.cells[5].innerText,
+                    tags: row.cells[6].innerText,
+                    status_text: statusBadge ? statusBadge.innerText : 'N/A',
+                    status_class: statusBadge ? statusBadge.className.split(' ').find(cls => cls !== 'badge-status') : 'unknown',
+                    created_at_display: row.cells[8].innerText
+                };
+            });
+
+            const prompt = allPrompts.find(p => p.id == promptId);
+
+            if (!prompt) {
+                showAlert('error', 'ไม่พบข้อมูล Prompt หรือข้อมูลไม่สมบูรณ์');
+                console.log("Prompt not found in current view for ID: ", promptId, "Available prompts: ", allPrompts);
+                return;
             }
-            
-            // Next button
-            const nextBtn = document.createElement('button');
-            nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
-            nextBtn.disabled = currentPage === totalPages;
-            nextBtn.onclick = () => loadUsers(currentPage + 1);
-            pagination.appendChild(nextBtn);
+
+            const detailContent = document.getElementById('marketplace-prompt-detail-content');
+            detailContent.innerHTML = `
+                <p><strong>ID:</strong> ${prompt.id}</p>
+                <p><strong>หัวข้อ:</strong> ${htmlspecialchars(prompt.title)}</p>
+                <p><strong>ผู้ขาย:</strong> ${htmlspecialchars(prompt.seller_username)}</p>
+                <p><strong>ราคา:</strong> ${htmlspecialchars(prompt.price_points)}</p>
+                <p><strong>Tags:</strong> ${htmlspecialchars(prompt.tags)}</p>
+                <p><strong>สถานะ:</strong> <span class="badge-status ${prompt.status_class}">${htmlspecialchars(prompt.status_text)}</span></p>
+                <p><strong>วันที่ส่ง:</strong> ${htmlspecialchars(prompt.created_at_display)}</p>
+                <p><strong>รูปภาพตัวอย่าง:</strong></p>
+                <div style="max-width: 300px; margin-bottom: 10px;">${prompt.image_url_html.includes('img') ? prompt.image_url_html.replace('prompt-image-admin', 'image-preview') : 'ไม่มีรูปภาพ'}</div>
+                <p><strong>Prompt จริง:</strong></p>
+                <div class="item-content" style="max-height: 200px; background: #f9fafb; border: 1px solid #e5e7eb; white-space: pre-wrap; word-wrap: break-word;">${htmlspecialchars(prompt.actual_prompt)}</div>
+            `;
+
+            const actionsContainer = document.getElementById('marketplace-prompt-actions');
+            actionsContainer.innerHTML = ''; 
+
+            if (prompt.status_class === 'pending_approval') {
+                actionsContainer.innerHTML += `<button class="btn btn-success" onclick="approveSellablePrompt(${prompt.id}, null, true)"><i class="fas fa-check"></i> อนุมัติ</button>`;
+                actionsContainer.innerHTML += `<button class="btn btn-danger" onclick="rejectSellablePrompt(${prompt.id}, null, 'rejected', true)"><i class="fas fa-times"></i> ปฏิเสธ</button>`;
+            } else if (prompt.status_class === 'approved') {
+                actionsContainer.innerHTML += `<button class="btn btn-warning" onclick="rejectSellablePrompt(${prompt.id}, null, 'rejected', true)"><i class="fas fa-ban"></i> ยกเลิกการอนุมัติ (และปฏิเสธ)</button>`;
+            } else if (prompt.status_class === 'rejected') {
+                 actionsContainer.innerHTML += `<button class="btn btn-success" onclick="approveSellablePrompt(${prompt.id}, null, true)"><i class="fas fa-redo"></i> อนุมัติใหม่</button> `;
+            }
+            actionsContainer.innerHTML += `<button class="btn" style="background-color:#6c757d;" onclick="closeModal('marketplace-prompt-detail-modal')"><i class="fas fa-times-circle"></i> ปิด</button>`;
+            openModal('marketplace-prompt-detail-modal');
         }
-        
-        function searchUsers() {
-            loadUsers(1);
+
+
+        function renderMarketplacePromptsPagination(currentPage, totalPages) {
+            const pagination = document.getElementById('marketplace-prompts-pagination');
+            pagination.innerHTML = ''; if (totalPages <= 1) return;
+            const prevBtn = document.createElement('button'); prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>'; prevBtn.disabled = currentPage === 1; prevBtn.onclick = () => loadPendingSellablePrompts(currentPage - 1); pagination.appendChild(prevBtn);
+            const maxPgs = 5; let sPage = Math.max(1,currentPage - Math.floor(maxPgs/2)); let ePage = Math.min(totalPages,sPage + maxPgs -1); if(ePage-sPage+1<maxPgs){sPage=Math.max(1,ePage-maxPgs+1);}
+            for (let i = sPage; i <= ePage; i++) { const pageBtn = document.createElement('button'); pageBtn.textContent = i; pageBtn.className = i === currentPage ? 'active' : ''; pageBtn.onclick = () => loadPendingSellablePrompts(i); pagination.appendChild(pageBtn); }
+            const nextBtn = document.createElement('button'); nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>'; nextBtn.disabled = currentPage === totalPages; nextBtn.onclick = () => loadPendingSellablePrompts(currentPage + 1); pagination.appendChild(nextBtn);
         }
-        
-        function editUser(userId) {
-            currentEditingUser = userId;
-            
-            // Get user data
-            const formData = new FormData();
-            formData.append('action', 'get_user');
-            formData.append('user_id', userId);
-            
-            fetch('admin.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const user = data.data;
-                    
-                    // Display user info
-                    document.getElementById('user-info-display').innerHTML = `
-                        <strong>ข้อมูลสมาชิก:</strong><br>
-                        <strong>ID:</strong> ${user.id}<br>
-                        <strong>Username:</strong> ${user.username}<br>
-                        <strong>ชื่อ-สกุล:</strong> ${user.full_name}<br>
-                        <strong>Email:</strong> ${user.email}
-                    `;
-                    
-                    // Set current values
-                    document.getElementById('user-member-type').value = user.member_type;
-                    document.getElementById('user-expire-date').value = user.expire_date || '';
-                    
-                    // Handle expire date visibility
-                    handleMemberTypeChange();
-                    
-                    // Show modal
-                    document.getElementById('user-modal').classList.add('active');
-                } else {
-                    showAlert('error', data.message);
-                }
-            })
-            .catch(error => {
-                showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
-                console.error('Error:', error);
+        function approveSellablePrompt(promptId, buttonElement, closeModalAfter = false) {
+            if (!confirm('คุณแน่ใจหรือไม่ที่จะอนุมัติ Prompt นี้?')) return;
+            const formData = new FormData(); formData.append('action', 'approve_sellable_prompt'); formData.append('prompt_id', promptId);
+            if(buttonElement) buttonElement.disabled = true;
+            fetch('admin.php', { method: 'POST', body: formData }).then(r => r.json()).then(d => { if (d.success) { showAlert('success', d.message); loadPendingSellablePrompts(currentMarketplacePromptsPage); if(closeModalAfter) closeModal('marketplace-prompt-detail-modal'); } else { showAlert('error', d.message || 'เกิดข้อผิดพลาดในการอนุมัติ'); } if(buttonElement) buttonElement.disabled = false; }).catch(e => { showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ (Approve)'); console.error('Error approving prompt:', e); if(buttonElement) buttonElement.disabled = false; });
+        }
+        function rejectSellablePrompt(promptId, buttonElement, newStatus = 'rejected', closeModalAfter = false) {
+            const confirmMessage = newStatus === 'rejected' ? 'คุณแน่ใจหรือไม่ที่จะปฏิเสธ Prompt นี้?' : 'คุณแน่ใจหรือไม่ที่จะดำเนินการนี้?';
+            if (!confirm(confirmMessage)) return;
+            const formData = new FormData(); formData.append('action', 'reject_sellable_prompt'); formData.append('prompt_id', promptId); formData.append('new_status', newStatus);
+            if(buttonElement) buttonElement.disabled = true;
+            fetch('admin.php', { method: 'POST', body: formData }).then(r => r.json()).then(d => { if (d.success) { showAlert('success', d.message); loadPendingSellablePrompts(currentMarketplacePromptsPage); if(closeModalAfter) closeModal('marketplace-prompt-detail-modal'); } else { showAlert('error', d.message || 'เกิดข้อผิดพลาดในการปฏิเสธ'); } if(buttonElement) buttonElement.disabled = false; }).catch(e => { showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ (Reject)'); console.error('Error rejecting prompt:', e); if(buttonElement) buttonElement.disabled = false; });
+        }
+        function loadMarketplaceSettings() { /* Values are pre-filled by PHP */ }
+         // --- END: Marketplace Admin JS ---
+
+        function loadUsers(page = 1) {
+            currentUsersPage = page; 
+            const search = document.getElementById('user-search')?.value || '';
+            const filter = document.getElementById('user-filter')?.value || 'all';
+            const formData = new FormData(); formData.append('action', 'get_users'); formData.append('page', page); formData.append('search', search); formData.append('filter', filter);
+            fetch('admin.php', { method: 'POST', body: formData }).then(r => r.json()).then(d => { if (d.success) { renderUsersTable(d.data.users); renderUserPagination(d.data.page, d.data.pages); } else { showAlert('error', d.message); } }).catch(e => { showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ (Users)'); console.error('Error:', e); });
+        }
+        function renderUsersTable(users) {
+            const tbody = document.getElementById('users-tbody'); tbody.innerHTML = '';
+            if (users.length === 0) { tbody.innerHTML = '<tr><td colspan="11" class="placeholder-message"><i class="fas fa-users"></i><p>ไม่พบข้อมูลสมาชิก</p></td></tr>'; return; }
+            users.forEach(user => {
+                const memberBadgeClass = user.member_type === 'free' ? 'free' : (user.member_type === 'monthly' ? 'monthly' : 'yearly');
+                const memberLabel = user.member_type === 'free' ? 'ฟรี' : (user.member_type === 'monthly' ? 'รายเดือน' : 'รายปี');
+                const avatar = user.avatar_url || avatarPlaceholder; // Use defined placeholder
+                const expireDate = user.expire_date ? new Date(user.expire_date).toLocaleDateString('th-TH') : '-';
+                const createdDate = new Date(user.created_at).toLocaleDateString('th-TH');
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td><img src="${htmlspecialchars(avatar)}" class="user-avatar" onerror="this.src='${avatarPlaceholder}'"></td>
+                    <td><strong>${htmlspecialchars(user.username)}</strong></td>
+                    <td>${htmlspecialchars(user.full_name)}</td>
+                    <td>${htmlspecialchars(user.email)}</td>
+                    <td><span class="member-badge ${memberBadgeClass}">${htmlspecialchars(memberLabel)}</span></td>
+                    <td>${user.points_balance !== null ? user.points_balance : 0} <i class="fas fa-coins" style="color: #f59e0b;"></i></td>
+                    <td>${expireDate}</td>
+                    <td><span class="status-badge ${user.status}">${user.status}</span></td>
+                    <td>${createdDate}</td>
+                    <td class="item-actions">
+                        <button class="btn btn-sm" onclick="editUser(${user.id})" style="background-color:#3b82f6;"><i class="fas fa-user-edit"></i></button>
+                        ${user.id !== 1 ? `<button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id})"><i class="fas fa-user-times"></i></button>` : ''}
+                    </td>
+                `;
+                tbody.appendChild(row);
             });
         }
-        
+        function renderUserPagination(currentPage, totalPages) {
+            const pagination = document.getElementById('users-pagination'); pagination.innerHTML = ''; if (totalPages <= 1) return;
+            const prevBtn = document.createElement('button'); prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>'; prevBtn.disabled = currentPage === 1; prevBtn.onclick = () => loadUsers(currentPage - 1); pagination.appendChild(prevBtn);
+            const maxPgs = 5; let sPage = Math.max(1,currentPage - Math.floor(maxPgs/2)); let ePage = Math.min(totalPages,sPage + maxPgs -1); if(ePage-sPage+1<maxPgs){sPage=Math.max(1,ePage-maxPgs+1);}
+            for (let i = sPage; i <= ePage; i++) { const pageBtn = document.createElement('button'); pageBtn.textContent = i; pageBtn.className = i === currentPage ? 'active' : ''; pageBtn.onclick = () => loadUsers(i); pagination.appendChild(pageBtn); }
+            const nextBtn = document.createElement('button'); nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>'; nextBtn.disabled = currentPage === totalPages; nextBtn.onclick = () => loadUsers(currentPage + 1); pagination.appendChild(nextBtn);
+        }
+        function searchUsers() { loadUsers(1); }
+        function editUser(userId) {
+            currentEditingUser = userId;
+            fetch('admin.php', { method: 'POST', body: new URLSearchParams({action: 'get_user', user_id: userId}) })
+            .then(response => response.json()).then(data => {
+                if (data.success) {
+                    const user = data.data;
+                    document.getElementById('user-info-display').innerHTML = `<strong>ID:</strong> ${user.id} | <strong>Username:</strong> ${htmlspecialchars(user.username)} <br><strong>Email:</strong> ${htmlspecialchars(user.email)}`;
+                    document.getElementById('user-member-type').value = user.member_type;
+                    document.getElementById('user-expire-date').value = user.expire_date || '';
+                    document.getElementById('user-points-balance').value = user.points_balance === null ? 0 : user.points_balance;
+                    handleMemberTypeChange(); openModal('user-modal');
+                } else { showAlert('error', data.message); }
+            }).catch(error => { showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ (Get User)'); console.error('Error:', error); });
+        }
         function handleMemberTypeChange() {
             const memberType = document.getElementById('user-member-type').value;
             const expireDateGroup = document.getElementById('expire-date-group');
             const expireDateInput = document.getElementById('user-expire-date');
-            
-            if (memberType === 'free') {
-                expireDateGroup.style.display = 'none';
-                expireDateInput.value = '';
-            } else {
-                expireDateGroup.style.display = 'block';
-                
-                // Set default expire date if empty
-                if (!expireDateInput.value) {
-                    const today = new Date();
-                    if (memberType === 'monthly') {
-                        today.setMonth(today.getMonth() + 1);
-                    } else if (memberType === 'yearly') {
-                        today.setFullYear(today.getFullYear() + 1);
-                    }
-                    expireDateInput.value = today.toISOString().split('T')[0];
-                }
-            }
+            if (memberType === 'free') { expireDateGroup.style.display = 'none'; expireDateInput.value = ''; } 
+            else { expireDateGroup.style.display = 'block'; if (!expireDateInput.value && (memberType === 'monthly' || memberType === 'yearly')) { const today = new Date(); if (memberType === 'monthly') today.setMonth(today.getMonth() + 1); else if (memberType === 'yearly') today.setFullYear(today.getFullYear() + 1); expireDateInput.value = today.toISOString().split('T')[0]; }}
         }
-        
         function saveUserMembership() {
             if (!currentEditingUser) return;
-            
             const memberType = document.getElementById('user-member-type').value;
-            const expireDate = document.getElementById('user-expire-date').value;
-            
-            const formData = new FormData();
-            formData.append('action', 'update_user_membership');
-            formData.append('user_id', currentEditingUser);
-            formData.append('member_type', memberType);
-            formData.append('expire_date', expireDate);
-            
-            fetch('admin.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    closeModal('user-modal');
-                    loadUsers(currentPage);
-                    showAlert('success', data.message);
-                } else {
-                    showAlert('error', data.message);
-                }
-            })
-            .catch(error => {
-                showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
-                console.error('Error:', error);
-            });
+            let expireDate = document.getElementById('user-expire-date').value;
+            const pointsBalance = document.getElementById('user-points-balance').value;
+            if (memberType === 'free') expireDate = '';
+            const formData = new FormData(); formData.append('action', 'update_user_membership'); formData.append('user_id', currentEditingUser); formData.append('member_type', memberType); formData.append('expire_date', expireDate); formData.append('points_balance', pointsBalance);
+            fetch('admin.php', { method: 'POST', body: formData }).then(r => r.json()).then(d => { if (d.success) { closeModal('user-modal'); loadUsers(currentUsersPage); showAlert('success', d.message); } else { showAlert('error', d.message); } }).catch(e => { showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ (Update User)'); console.error('Error:', e); });
         }
-        
         function deleteUser(userId) {
-            if (confirm('คุณแน่ใจหรือไม่ที่จะลบผู้ใช้นี้?')) {
-                const formData = new FormData();
-                formData.append('action', 'delete_user');
-                formData.append('user_id', userId);
-                
-                fetch('admin.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        loadUsers(currentPage);
-                        showAlert('success', data.message);
-                    } else {
-                        showAlert('error', data.message);
-                    }
-                })
-                .catch(error => {
-                    showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
-                    console.error('Error:', error);
-                });
+            if (userId === 1) { showAlert('error', 'ไม่สามารถลบบัญชี Admin หลักได้'); return; }
+            if (confirm(`คุณแน่ใจหรือไม่ที่จะลบผู้ใช้ ID: ${userId}? การกระทำนี้จะเปลี่ยนสถานะเป็น "deleted"`)) {
+                fetch('admin.php', { method: 'POST', body: new URLSearchParams({action: 'delete_user', user_id: userId}) }).then(r => r.json()).then(d => { if (d.success) { loadUsers(currentUsersPage); showAlert('success', d.message); } else { showAlert('error', d.message); } }).catch(e => { showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ (Delete User)'); console.error('Error:', e); });
             }
         }
-        
-        // Modal Functions
-        function openExampleModal(editId = null) {
-            currentEditingExample = editId;
-            const modal = document.getElementById('example-modal');
-            const title = document.getElementById('example-modal-title');
-            
-            if (editId) {
-                const example = examplesData.find(e => e.id == editId);
-                title.textContent = 'แก้ไข Prompt ยอดนิยม';
-                document.getElementById('example-title').value = example.title;
-                document.getElementById('example-prompt').value = example.prompt;
-                document.getElementById('example-icon').value = example.icon;
-            } else {
-                title.textContent = 'เพิ่ม Prompt ยอดนิยม';
-                document.getElementById('example-title').value = '';
-                document.getElementById('example-prompt').value = '';
-                document.getElementById('example-icon').value = 'fas fa-image';
-            }
-            
-            modal.classList.add('active');
-        }
-        
-        function openGalleryModal(editId = null) {
-            currentEditingGallery = editId;
-            const modal = document.getElementById('gallery-modal');
-            const title = document.getElementById('gallery-modal-title');
-            const preview = document.getElementById('gallery-preview');
-            
-            if (editId) {
-                const item = galleryData.find(g => g.id == editId);
-                title.textContent = 'แก้ไขรายการแกลเลอรี่';
-                document.getElementById('gallery-title-input').value = item.title;
-                document.getElementById('gallery-desc').value = item.description;
-                document.getElementById('gallery-image').value = item.image_url;
-                document.getElementById('gallery-prompt').value = item.prompt;
-                document.getElementById('gallery-icon').value = item.icon;
-                preview.src = item.image_url;
-                preview.style.display = 'block';
-            } else {
-                title.textContent = 'เพิ่มรายการแกลเลอรี่';
-                document.getElementById('gallery-title-input').value = '';
-                document.getElementById('gallery-desc').value = '';
-                document.getElementById('gallery-image').value = '';
-                document.getElementById('gallery-prompt').value = '';
-                document.getElementById('gallery-icon').value = 'fas fa-image';
-                preview.style.display = 'none';
-            }
-            
-            modal.classList.add('active');
-        }
-        
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-        
-        // Preview image
-        function previewImage(url) {
-            const preview = document.getElementById('gallery-preview');
-            if (url) {
-                preview.src = url;
-                preview.style.display = 'block';
-                preview.onerror = function() {
-                    this.style.display = 'none';
-                    showAlert('error', 'ไม่สามารถโหลดรูปภาพได้');
-                };
-            } else {
-                preview.style.display = 'none';
-            }
-        }
-        
-        // Save Functions
-        function saveExample() {
-            const title = document.getElementById('example-title').value.trim();
-            const prompt = document.getElementById('example-prompt').value.trim();
-            const icon = document.getElementById('example-icon').value.trim() || 'fas fa-image';
-            
-            if (!title || !prompt) {
-                showAlert('error', 'กรุณากรอกข้อมูลให้ครบถ้วน');
-                return;
-            }
-            
-            const formData = new FormData();
-            formData.append('action', 'save_example');
-            formData.append('title', title);
-            formData.append('prompt', prompt);
-            formData.append('icon', icon);
-            
-            if (currentEditingExample) {
-                formData.append('id', currentEditingExample);
-            }
-            
-            fetch('admin.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    closeModal('example-modal');
-                    refreshData();
-                    showAlert('success', data.message);
-                } else {
-                    showAlert('error', data.message);
-                }
-            })
-            .catch(error => {
-                showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
-                console.error('Error:', error);
-            });
-        }
-        
-        function saveGalleryItem() {
-            const title = document.getElementById('gallery-title-input').value.trim();
-            const description = document.getElementById('gallery-desc').value.trim();
-            const image_url = document.getElementById('gallery-image').value.trim();
-            const prompt = document.getElementById('gallery-prompt').value.trim();
-            const icon = document.getElementById('gallery-icon').value.trim() || 'fas fa-image';
-            
-            if (!title || !description || !image_url || !prompt) {
-                showAlert('error', 'กรุณากรอกข้อมูลให้ครบถ้วน');
-                return;
-            }
-            
-            const formData = new FormData();
-            formData.append('action', 'save_gallery');
-            formData.append('title', title);
-            formData.append('description', description);
-            formData.append('image_url', image_url);
-            formData.append('prompt', prompt);
-            formData.append('icon', icon);
-            
-            if (currentEditingGallery) {
-                formData.append('id', currentEditingGallery);
-            }
-            
-            fetch('admin.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    closeModal('gallery-modal');
-                    refreshData();
-                    showAlert('success', data.message);
-                } else {
-                    showAlert('error', data.message);
-                }
-            })
-            .catch(error => {
-                showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
-                console.error('Error:', error);
-            });
-        }
-        
-        function saveMessages() {
-            const formData = new FormData();
-            formData.append('action', 'save_settings');
+        function saveGeneralMessages() {
+            const formData = new FormData(); formData.append('action', 'save_settings');
             formData.append('settings[placeholder_title]', document.getElementById('placeholder-title').value);
             formData.append('settings[placeholder_description]', document.getElementById('placeholder-description').value);
-            formData.append('settings[gallery_title]', document.getElementById('gallery-title').value);
-            formData.append('settings[gallery_description]', document.getElementById('gallery-description').value);
-            
-            fetch('admin.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showAlert('success', data.message);
-                } else {
-                    showAlert('error', data.message);
-                }
-            })
-            .catch(error => {
-                showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
-                console.error('Error:', error);
-            });
+            formData.append('settings[gallery_title]', document.getElementById('gallery-title-input-setting').value);
+            formData.append('settings[gallery_description]', document.getElementById('gallery-description-setting').value);
+            fetch('admin.php', { method: 'POST', body: formData }).then(r => r.json()).then(d => showAlert(d.success ? 'success' : 'error', d.message))
+            .catch(e => { showAlert('error', 'Error (Save General Messages)'); console.error('Error:', e); });
         }
-        
-        function saveSettings() {
-            const formData = new FormData();
-            formData.append('action', 'save_settings');
+        function saveGeneralSettings() {
+            const formData = new FormData(); formData.append('action', 'save_settings');
             formData.append('settings[online_count]', document.getElementById('online-count').value);
             formData.append('settings[site_title]', document.getElementById('site-title').value);
             formData.append('settings[site_description]', document.getElementById('site-description').value);
-            
-            fetch('admin.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showAlert('success', data.message);
-                } else {
-                    showAlert('error', data.message);
-                }
-            })
-            .catch(error => {
-                showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
-                console.error('Error:', error);
-            });
+            fetch('admin.php', { method: 'POST', body: formData }).then(r => r.json()).then(d => showAlert(d.success ? 'success' : 'error', d.message))
+            .catch(e => { showAlert('error', 'Error (Save General Settings)'); console.error('Error:', e); });
         }
-        
-        // Delete Functions
-        function deleteExample(id) {
-            if (confirm('คุณแน่ใจหรือไม่ที่จะลบ Prompt นี้?')) {
-                const formData = new FormData();
-                formData.append('action', 'delete_example');
-                formData.append('id', id);
-                
-                fetch('admin.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        refreshData();
-                        showAlert('success', data.message);
-                    } else {
-                        showAlert('error', data.message);
-                    }
-                })
-                .catch(error => {
-                    showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
-                    console.error('Error:', error);
-                });
-            }
+        function saveMarketplaceSettings() {
+            const formData = new FormData(); formData.append('action', 'update_marketplace_settings');
+            formData.append('settings[commission_rate]', document.getElementById('commission-rate').value);
+            formData.append('settings[default_prompt_price]', document.getElementById('default-prompt-price').value);
+            fetch('admin.php', { method: 'POST', body: formData }).then(r => r.json()).then(d => showAlert(d.success ? 'success' : 'error', d.message))
+            .catch(e => { showAlert('error', 'Error (Save MP Settings)'); console.error('Error:', e); });
         }
+        function openModal(modalId) { const m = document.getElementById(modalId); if(m) m.classList.add('active'); else console.error('Modal not found: ' + modalId); }
+        function closeModal(modalId) { const m = document.getElementById(modalId); if(m) m.classList.remove('active'); }
+        function previewImage(url, previewId) { const p = document.getElementById(previewId); if(url){ p.src=url; p.style.display='block'; p.onerror=()=>{p.style.display='none';showAlert('error','โหลดรูปไม่ได้');};}else{p.style.display='none';}}
+        function saveExample(){const t=document.getElementById('example-title').value.trim(),p=document.getElementById('example-prompt').value.trim(),i=document.getElementById('example-icon').value.trim()||'fas fa-lightbulb';if(!t||!p){showAlert('error','กรอกข้อมูล Example');return;}const fd=new FormData();fd.append('action','save_example');fd.append('title',t);fd.append('prompt',p);fd.append('icon',i);if(currentEditingExample)fd.append('id',currentEditingExample);fetch('admin.php',{method:'POST',body:fd}).then(r=>r.json()).then(d=>{if(d.success){closeModal('example-modal');refreshData(true);showAlert('success',d.message);}else{showAlert('error',d.message);}}).catch(e=>showAlert('error','Error (Save Ex)'));}
+        function deleteExample(id){if(confirm('ลบ Prompt ยอดนิยมนี้?')){fetch('admin.php',{method:'POST',body:new URLSearchParams({action:'delete_example',id:id})}).then(r=>r.json()).then(d=>{if(d.success){refreshData(true);showAlert('success',d.message);}else{showAlert('error',d.message);}}).catch(e=>showAlert('error','Error (Del Ex)'));}}
+        function loadExamples(){const c=document.getElementById('examples-list');c.innerHTML='';if(examplesData.length===0){c.innerHTML='<div class="placeholder-message"><i class="fas fa-lightbulb"></i><p>ยังไม่มี Prompt ยอดนิยม</p></div>';return;}examplesData.forEach(ex=>{const ca=document.createElement('div');ca.className='item-card';ca.innerHTML=`<div class="item-header"><div class="item-title"><i class="${htmlspecialchars(ex.icon)}"></i> ${htmlspecialchars(ex.title)}</div><div class="item-actions"><button class="btn btn-sm" onclick="openExampleModal(${ex.id})"><i class="fas fa-edit"></i></button><button class="btn btn-sm btn-danger" onclick="deleteExample(${ex.id})"><i class="fas fa-trash"></i></button></div></div><div class="item-content">${htmlspecialchars(ex.prompt)}</div>`;c.appendChild(ca);});}
+        function openExampleModal(editId=null){currentEditingExample=editId;const m=document.getElementById('example-modal'),tE=document.getElementById('example-modal-title');if(editId){const ex=examplesData.find(e=>e.id==editId);tE.textContent='แก้ไข Prompt ยอดนิยม';document.getElementById('example-title').value=ex.title;document.getElementById('example-prompt').value=ex.prompt;document.getElementById('example-icon').value=ex.icon;}else{tE.textContent='เพิ่ม Prompt ยอดนิยม';document.getElementById('example-title').value='';document.getElementById('example-prompt').value='';document.getElementById('example-icon').value='fas fa-lightbulb';}m.classList.add('active');}
+        function saveGalleryItem(){const t=document.getElementById('gallery-title-input').value.trim(),d=document.getElementById('gallery-desc').value.trim(),iu=document.getElementById('gallery-image').value.trim(),p=document.getElementById('gallery-prompt').value.trim(),i=document.getElementById('gallery-icon').value.trim()||'fas fa-image';if(!t||!iu||!p){showAlert('error','กรอกข้อมูล Gallery');return;}const fd=new FormData();fd.append('action','save_gallery');fd.append('title',t);fd.append('description',d);fd.append('image_url',iu);fd.append('prompt',p);fd.append('icon',i);if(currentEditingGallery)fd.append('id',currentEditingGallery);fetch('admin.php',{method:'POST',body:fd}).then(r=>r.json()).then(d=>{if(d.success){closeModal('gallery-modal');refreshData(true);showAlert('success',d.message);}else{showAlert('error',d.message);}}).catch(e=>showAlert('error','Error (Save Gal)'));}
+        function deleteGalleryItem(id){if(confirm('ลบรายการแกลเลอรี่นี้?')){fetch('admin.php',{method:'POST',body:new URLSearchParams({action:'delete_gallery',id:id})}).then(r=>r.json()).then(d=>{if(d.success){refreshData(true);showAlert('success',d.message);}else{showAlert('error',d.message);}}).catch(e=>showAlert('error','Error (Del Gal)'));}}
+        function loadGallery(){const c=document.getElementById('gallery-list');c.innerHTML='';if(galleryData.length===0){c.innerHTML='<div class="placeholder-message"><i class="fas fa-photo-video"></i><p>ยังไม่มีรายการแกลเลอรี่</p></div>';return;}galleryData.forEach(it=>{const ca=document.createElement('div');ca.className='item-card gallery-item-card';ca.innerHTML=`<img src="${htmlspecialchars(it.image_url)}" alt="${htmlspecialchars(it.title)}" class="gallery-image-preview" loading="lazy" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div style=\\"width:150px; height:100px; background:#eee; display:flex; align-items:center; justify-content:center; border-radius:8px; color:#999; font-size:0.8em;\\">No Image</div>')"><div><div class="item-header"><div class="item-title"><i class="${htmlspecialchars(it.icon)}"></i> ${htmlspecialchars(it.title)}</div><div class="item-actions"><button class="btn btn-sm" onclick="openGalleryModal(${it.id})"><i class="fas fa-edit"></i></button><button class="btn btn-sm btn-danger" onclick="deleteGalleryItem(${it.id})"><i class="fas fa-trash"></i></button></div></div><div style="color:#6b7280;font-size:0.85em;margin-bottom:10px;">${htmlspecialchars(it.description)}</div><div class="item-content">${htmlspecialchars(it.prompt)}</div></div>`;c.appendChild(ca);});}
+        function openGalleryModal(editId=null){currentEditingGallery=editId;const m=document.getElementById('gallery-modal'),tE=document.getElementById('gallery-modal-title'),pr=document.getElementById('gallery-preview');if(editId){const it=galleryData.find(g=>g.id==editId);tE.textContent='แก้ไขรายการแกลเลอรี่';document.getElementById('gallery-title-input').value=it.title;document.getElementById('gallery-desc').value=it.description;document.getElementById('gallery-image').value=it.image_url;document.getElementById('gallery-prompt').value=it.prompt;document.getElementById('gallery-icon').value=it.icon;previewImage(it.image_url,'gallery-preview');}else{tE.textContent='เพิ่มรายการแกลเลอรี่';document.getElementById('gallery-title-input').value='';document.getElementById('gallery-desc').value='';document.getElementById('gallery-image').value='';document.getElementById('gallery-prompt').value='';document.getElementById('gallery-icon').value='fas fa-image';previewImage('','gallery-preview');}m.classList.add('active');}
+        function refreshData(showSuccess=false){fetch('admin.php',{method:'POST',body:new URLSearchParams({action:'get_data'})}).then(r=>r.json()).then(d=>{if(d.success){examplesData=d.data.examples;galleryData=d.data.gallery;document.getElementById('total-examples').textContent=d.data.stats.total_examples;document.getElementById('total-gallery').textContent=d.data.stats.total_gallery;document.getElementById('total-user-prompts').textContent=d.data.stats.total_user_prompts;document.getElementById('today-prompts').textContent=d.data.stats.today_prompts;document.getElementById('stat-sellable-prompts').textContent=d.data.stats.total_sellable_prompts||0;document.getElementById('stat-transactions').textContent=d.data.stats.total_transactions||0;const activeSec=document.querySelector('.admin-section.active');if(activeSec)showSection(activeSec.id);if(showSuccess)showAlert('success','ข้อมูลอัปเดตแล้ว');}else{if(showSuccess)showAlert('error','อัปเดตข้อมูลไม่ได้');}}).catch(e=>{if(showSuccess)showAlert('error','Error (Refresh)');console.error('Error refreshing data:',e);});}
+        function updateStats(){refreshData(false);}
+        function showAlert(type,message){const ac=document.getElementById('alert-container');const ad=document.createElement('div');ad.className=`alert ${type}`;ad.innerHTML=`<i class="fas fa-${type==='success'?'check-circle':'exclamation-triangle'}"></i> ${htmlspecialchars(message)}`;ad.style.display='block';ac.appendChild(ad);setTimeout(()=>{ad.style.opacity=0;setTimeout(()=>ad.remove(),300);},4000);}
+        function logout(){if(confirm('ออกจากระบบ?')){fetch('admin.php',{method:'POST',body:new URLSearchParams({action:'logout'})}).then(r=>r.json()).then(d=>{if(d.success)window.location.href='admin.php';}).catch(e=>window.location.href='admin.php');}}
         
-        function deleteGalleryItem(id) {
-            if (confirm('คุณแน่ใจหรือไม่ที่จะลบรายการแกลเลอรี่นี้?')) {
-                const formData = new FormData();
-                formData.append('action', 'delete_gallery');
-                formData.append('id', id);
-                
-                fetch('admin.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        refreshData();
-                        showAlert('success', data.message);
-                    } else {
-                        showAlert('error', data.message);
-                    }
-                })
-                .catch(error => {
-                    showAlert('error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
-                    console.error('Error:', error);
-                });
-            }
-        }
-        
-        // Load Functions
-        function loadExamples() {
-            const container = document.getElementById('examples-list');
-            container.innerHTML = '';
-            
-            if (examplesData.length === 0) {
-                container.innerHTML = '<div class="placeholder-message"><i class="fas fa-inbox"></i><p>ยังไม่มี Prompt ยอดนิยม</p></div>';
-                return;
-            }
-            
-            examplesData.forEach(example => {
-                const card = document.createElement('div');
-                card.className = 'item-card';
-                card.innerHTML = `
-                    <div class="item-header">
-                        <div class="item-title">
-                            <i class="${example.icon}"></i> ${example.title}
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn" onclick="openExampleModal(${example.id})" style="padding: 8px 15px; font-size: 12px;">
-                                <i class="fas fa-edit"></i> แก้ไข
-                            </button>
-                            <button class="btn btn-danger" onclick="deleteExample(${example.id})" style="padding: 8px 15px; font-size: 12px;">
-                                <i class="fas fa-trash"></i> ลบ
-                            </button>
-                        </div>
-                    </div>
-                    <div class="item-content">${example.prompt}</div>
-                `;
-                container.appendChild(card);
-            });
-        }
-        
-        function loadGallery() {
-            const container = document.getElementById('gallery-list');
-            container.innerHTML = '';
-            
-            if (galleryData.length === 0) {
-                container.innerHTML = '<div class="placeholder-message"><i class="fas fa-images"></i><p>ยังไม่มีรายการแกลเลอรี่</p></div>';
-                return;
-            }
-            
-            galleryData.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'item-card gallery-item-card';
-                card.innerHTML = `
-                    <img src="${item.image_url}" alt="${item.title}" class="gallery-image-preview" loading="lazy" onerror="this.src='https://via.placeholder.com/200x120?text=Image+Not+Found'">
-                    <div>
-                        <div class="item-header">
-                            <div class="item-title">
-                                <i class="${item.icon}"></i> ${item.title}
-                            </div>
-                            <div class="item-actions">
-                                <button class="btn" onclick="openGalleryModal(${item.id})" style="padding: 8px 15px; font-size: 12px;">
-                                    <i class="fas fa-edit"></i> แก้ไข
-                                </button>
-                                <button class="btn btn-danger" onclick="deleteGalleryItem(${item.id})" style="padding: 8px 15px; font-size: 12px;">
-                                    <i class="fas fa-trash"></i> ลบ
-                                </button>
-                            </div>
-                        </div>
-                        <div style="color: #666; font-style: italic; margin-bottom: 10px;">${item.description}</div>
-                        <div class="item-content">${item.prompt}</div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-        
-        // Refresh data from server
-        function refreshData() {
-            const formData = new FormData();
-            formData.append('action', 'get_data');
-            
-            fetch('admin.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    examplesData = data.data.examples;
-                    galleryData = data.data.gallery;
-                    
-                    // Update stats
-                    document.getElementById('total-examples').textContent = data.data.stats.total_examples;
-                    document.getElementById('total-gallery').textContent = data.data.stats.total_gallery;
-                    document.getElementById('total-user-prompts').textContent = data.data.stats.total_user_prompts;
-                    document.getElementById('today-prompts').textContent = data.data.stats.today_prompts;
-                    
-                    // Reload current section
-                    const activeSection = document.querySelector('.admin-section.active');
-                    if (activeSection.id === 'examples') {
-                        loadExamples();
-                    } else if (activeSection.id === 'gallery') {
-                        loadGallery();
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Error refreshing data:', error);
-            });
-        }
-        
-        // Utility Functions
-        function updateStats() {
-            refreshData();
-        }
-        
-        function showAlert(type, message) {
-            // Remove existing alerts
-            document.querySelectorAll('.alert').forEach(alert => {
-                alert.remove();
-            });
-            
-            const alert = document.createElement('div');
-            alert.className = `alert ${type}`;
-            alert.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
-                ${message}
-            `;
-            alert.style.display = 'block';
-            
-            // Insert after header
-            const header = document.querySelector('.admin-header');
-            header.insertAdjacentElement('afterend', alert);
-            
-            setTimeout(() => {
-                alert.remove();
-            }, 5000);
-        }
-        
-        // Logout function
-        function logout() {
-            if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
-                const formData = new FormData();
-                formData.append('action', 'logout');
-                
-                fetch('admin.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.href = 'admin.php';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    window.location.href = 'admin.php';
-                });
-            }
-        }
-        
-        // Initialize
         window.addEventListener('DOMContentLoaded', function() {
-            loadExamples();
-            
-            // Add search event listener
-            const searchInput = document.getElementById('user-search');
-            if (searchInput) {
-                searchInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        searchUsers();
-                    }
-                });
-            }
-            
-            // Add member type change event listener
-            const memberTypeSelect = document.getElementById('user-member-type');
-            if (memberTypeSelect) {
-                memberTypeSelect.addEventListener('change', handleMemberTypeChange);
-            }
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                const section = btn.dataset.section;
+                // btn.removeAttribute('onclick'); // Removed if you prefer JS-only event handling
+                btn.addEventListener('click', (event) => showSection(section, event));
+            });
+            showSection('dashboard', null); 
+            const searchInput = document.getElementById('user-search'); if (searchInput) searchInput.addEventListener('keypress', e => { if (e.key === 'Enter') searchUsers(); });
+            const memberTypeSelect = document.getElementById('user-member-type'); if (memberTypeSelect) memberTypeSelect.addEventListener('change', handleMemberTypeChange);
+            const marketplaceFilter = document.getElementById('marketplace-prompt-filter');
+            if(marketplaceFilter) marketplaceFilter.value = 'pending_approval';
         });
-        
-        // Close modals when clicking outside
-        window.addEventListener('click', function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.classList.remove('active');
-            }
-        });
-        
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                document.querySelectorAll('.modal.active').forEach(modal => {
-                    modal.classList.remove('active');
-                });
-            }
-        });
-        
-        // Auto refresh every 30 seconds
-        setInterval(refreshData, 30000);
+        window.addEventListener('click', function(event) { if (event.target.classList.contains('modal')) event.target.classList.remove('active'); });
+        document.addEventListener('keydown', function(event) { if (event.key === 'Escape') document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active')); });
+        setInterval(updateStats, 60000);
     </script>
 </body>
 </html>
