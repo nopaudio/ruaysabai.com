@@ -762,7 +762,7 @@ $daysSinceJoin = $diff->days;
                         <label class="form-label">
                             <i class="fas fa-image"></i> Avatar URL
                         </label>
-                        <input type="url" name="avatar_url" value="<?= htmlspecialchars($user['avatar_url']) ?>" class="form-control" placeholder="https://example.com/avatar.jpg (ไม่บังคับ)" onchange="previewAvatar(this.value)">
+                        <input type="url" name="avatar_url" value="<?= htmlspecialchars($user['avatar_url']) ?>" class="form-control" placeholder="https://example.com/avatar.jpg (ไม่บังคับ)" onChange="previewAvatar(this.value)">
                         <div class="form-help">ใส่ URL รูปภาพสำหรับ Avatar (ถ้าไม่ใส่จะใช้รูปสร้างอัตโนมัติ)</div>
                         
                         <!-- Avatar Preview -->
@@ -790,7 +790,7 @@ $daysSinceJoin = $diff->days;
                     </a>
                 <?php endif; ?>
                 
-                <a href="logout.php" class="action-btn danger" onclick="return confirm('คุณต้องการออกจากระบบหรือไม่?')">
+                <a href="logout.php" class="action-btn danger" onClick="return confirm('คุณต้องการออกจากระบบหรือไม่?')">
                     <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
                 </a>
             </div>
